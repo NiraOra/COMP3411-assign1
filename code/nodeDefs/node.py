@@ -1,6 +1,14 @@
 from nodeDefs import islandNode as islN, waterNode as watN
+import queue
+from queue import PriorityQueue
 # import valueDefs as vals
 # Generic Node initialisation into the dict
+
+# RETURN A DICTIONARY OF DEFINITIONS AND ISLANDS AND STUFF. OMG
+# FIXME maybe idea: add the islands in a min priority queue like
+dict = []
+# if you can use priorityqueue in python. omg
+queueIsland = queue.PriorityQueue()
 
 WATER = " "
 
@@ -18,7 +26,7 @@ def nodeInit(map):
                 # find out neighbours (just put it within islandInit later on; here for convenience)
                 islN.findNeighbours(i, j, map)
         print("\n")
-    return map
+    return dict
 
 def finalInit(map):
     code = ".123456789abc "
