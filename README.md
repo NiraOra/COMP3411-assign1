@@ -1,5 +1,6 @@
-# COMP3411-assign1
-Repo just in case collab for assignment yay 
+# COMP3411 Assign 1
+
+Repo just in case collab for assignment yay
 
 ## Things to keep in mind
 
