@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-from nodeDefs import node
+from nodeDefs import node, valueDefs
 
 # map = np.zeros()
 # map = 0
