@@ -20,5 +20,5 @@ Repo just in case collab for assignment yay
 
 ``` (terminal)
 ...$~ gcc bridgen.c -o bridgen (once)
-...$~ ../bridgecheck sX.in < sX.out (where sX.in is the input file and sX.out is the output file)
+...$~ ./bridgecheck sX.in < sX.out (where sX.in is the input file and sX.out is the output file)
 ```
