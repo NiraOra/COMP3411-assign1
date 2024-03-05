@@ -1,3 +1,8 @@
-# code on here
+# Code on here
 
-- ye
+- Idea: Node initialisation
+
+                                NODE
+                        |                   |
+                    IslandNode              WaterNode
+                    - has stuff             - has stuff    

@@ -1,0 +1,1 @@
+# Generic Node initialisation into the dict
