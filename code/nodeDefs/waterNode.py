@@ -4,3 +4,6 @@
 # 1. bridgeCapacity is 3; can't go beyond that
 # 2. bridgeType: SINGLE, DOUBLE, TRIPLE or just water
 # get functions as well I suppose
+
+def waterInit(num):
+    print("I am a waternode ", num, "\n")

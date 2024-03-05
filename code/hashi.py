@@ -1,11 +1,16 @@
 import numpy as np
 import sys
+from nodeDefs import node
 
-map = np.zeros()
+# map = np.zeros()
+# map = 0
+# this is just a test. call into the node thing from here
+# print(node.nodeInit(map))
 
 def main():
     code = ".123456789abc"
     nrow, ncol, map = scan_map()
+    node.nodeInit(map)
     for r in range(nrow):
         for c in range(ncol):
             print(code[map[r][c]],end="")
