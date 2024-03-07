@@ -11,9 +11,11 @@ WATER = " "
 bridgeCapacity = 0 # is water. okay maybe I'll do the opposite
 bridgeType = WATER # initial state
 
-
-def waterInit(num):
-    print("I am a waternode ", num, "\n")
+# initialise waterNode
+def waterInit(row, col):
+    # print("I am a waternode { ", row, " ", col, "}\n")
+    # print("Here's my capacity: ",  bridgeCapacity)
+    return [bridgeCapacity, bridgeType]
     
 def setBridge(smth, smth1, smth2):
     # setting the bridge and also like. the capacity basically
@@ -21,12 +23,14 @@ def setBridge(smth, smth1, smth2):
     # horizontal
     if bridgeCapacity > 3:
         print("No more!!!")
+        # don't pass
     elif bridgeCapacity == 1:
         print("1")
     elif bridgeCapacity == 2:
         print("2")
     elif bridgeCapacity == 3:
         print("3")
-        
+    pass
+    
 def iterateCapacity():
     bridgeCapacity = bridgeCapacity + 1
