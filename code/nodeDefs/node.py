@@ -14,18 +14,19 @@ class Node:
     row = -1
     col = -1
 
+    # init function
     def __init__(self, row, col, capacity):
         self.row = row
         self.col = col
         self.currCapacity = capacity
         return self
+    
+    # iterate through capacity
+    def updateCapacity(self):
+        self.capacity = self.capacity - 1
         
+    # all the getter functions
     def getCurrCapacity(self): 
         return self.currCapacity
-    
-      
-
-# def print_nodes(nodes):
-#     for key in sorted(nodes.keys()):
-#         node = nodes[key]
-#         print(f"Node at ({node.row}, {node.col}): {node.value if isinstance(node, WaterNode) else node.elevation}")
+    def getRow(self): return self.row
+    def getCol(self): return self.col

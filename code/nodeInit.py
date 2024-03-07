@@ -34,6 +34,8 @@ def findNeighbours(object, row, col, grid, nrow, ncol):
         left = col
         right = col
         
+        # TODO: okay also. need to check if an instance of islandNode but we move
+        
         # If no neighbours are found, then it must be water but i need -1 so. yeah
         lCoords = [row, -1]
         rCoords = [row, -1]
@@ -109,8 +111,12 @@ def findNeighbours(object, row, col, grid, nrow, ncol):
         if bCoords[0] > -1:
             neighbourList.append(dict[(bCoords[0], bCoords[1])])
 
+        print("Lcoords: ", lCoords)
+        print("Rcoords: ", rCoords)
+        print("Acoords: ", aCoords)
+        print("Bcoords: ", bCoords)
         # neighbours = [lNeighbour, rNeighbour, aNeighbour, bNeighbour]
-        appendStack(object, neighbourList, row, col)
+        appendStack(object, neighbourList)
         
         pass
 
@@ -118,12 +124,10 @@ def findNeighbours(object, row, col, grid, nrow, ncol):
 def appendStack(object, neighbours):
     neighbours = sorted(neighbours, key=lambda x: x.getCurrCapacity())
     
-    print(object.getCurrCapacity(), "is the current island as of now")
-    
-    # print("Sorted neighbours", neighbours) # Remove later
+    # print(object.getCurrCapacity(), "is the current island as of now")
 
     for i in range(len(neighbours)):
-        print("Island number, ", neighbours[i].getCurrCapacity())
+        print("Islands nearby: ", neighbours[i].getCurrCapacity())
         # Only including island neighbours
         object.putStack(neighbours[i])
     
