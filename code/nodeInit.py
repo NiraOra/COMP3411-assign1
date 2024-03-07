@@ -21,12 +21,16 @@ def nodeInit(map, nrow, ncol):
     # return dictionary of all nodes
     return dict
 
+# just a setter for all island nodes to have neighbours; also put neighbouring water nodes in adj list or smth. or not.
+# or in a queue. whichever works
+
 def islNodesNeighbours(dict, nrow, ncol):
     for i in range(nrow):
         for j in range(ncol):
             if isinstance(dict[(i, j)], islN.IslandNode):
                 findNeighbours(dict[i, j], i, j, dict, nrow, ncol)
 
+# finds the neighbours accordingly
 def findNeighbours(object, row, col, grid, nrow, ncol):
         # initialisations
         above = row
