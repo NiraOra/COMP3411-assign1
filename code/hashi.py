@@ -27,8 +27,7 @@ def debug(nrow, ncol, dict):
     print("Dict as follows\n")
     for i in range(nrow):
         for j in range(ncol):
-            array = dict[(i, j)]
-            print("the value at the node {", i, j, "} is ", array[0])
+            print("the value at the node {", i, j, "} is ", dict[(i, j)][1])
       
 # 1st step: to scan the map  
 def scan_map():

@@ -1,4 +1,4 @@
-from nodeDefs import islandNode as islN, waterNode as watN
+from nodeDefs import islandNode as islN, waterNode as watN, valueDefs as vd
 import queue
 import numpy as np
 from queue import PriorityQueue
@@ -10,8 +10,6 @@ from queue import PriorityQueue
 dict = {}
 # if you can use priorityqueue in python. omg
 queueIsland = queue.PriorityQueue()
-# TODO: to remove
-WATER = " "
 
 # node initialisation on the grid to return
 def nodeInit(map):
@@ -26,7 +24,7 @@ def nodeInit(map):
                 print(dict[(i, j)])
             else:
                 # initialise an island node
-                tempNode = islN.islandInit(i, j, map)
+                tempNode = islN.islandInit(i, j, map, len(map), len(map[i]))
                 # um added
                 dict[(i, j)] = tempNode
                 # just check
@@ -42,5 +40,5 @@ def finalInit(map):
     for i in range(0, len(map)):
         for j in range(0, len(map[i])):
             if code[map[i][j]] == '.':
-                map[i][j] == WATER
+                map[i][j] == vd.WATER
     return map

@@ -17,45 +17,65 @@ adjList = [] # fill this with neighbouring bridges as time passes
 stack = []
 
 # initialising island
-def islandInit(row, col, map):
+def islandInit(row, col, map, nrow, ncol):
     # FIXME: this is all just temp stuff; to remove
-    print("HI ISLAND {", row, " ", col, "}\n")
+    # print("HI ISLAND {", row, " ", col, "}\n")
     maxCapacity = map[row][col]
-    findNeighbours(row, col, map)
+    findNeighbours(row, col, map, nrow, ncol)
     # here. can change depending upon what you want but go for it
     return [maxCapacity, currentCapacity, stack]
 
 # TODO: incorporated from Sophie's code: find neighbours
 # removed stack: used as a part of islandNode anyway
-def findNeighbours(row, col, grid):
+def findNeighbours(row, col, grid, nrow, ncol):
+    # initialisations
     above = below = row
     left = right = col
     # If no neighbours are found, then it must be water
     lNeighbour = rNeighbour = aNeighbour = bNeighbour = 0
 
     # Checking the left and right of the cell for any possible neighbours
-    while left != 0:
-        left -= 1
-        if grid[row][left] > 0:
-            lNeighbour = grid[row][left]
+    # ADDED: nrow != ncol sometimes so. just a lil addition to cases
+    
+    # LEFT ISLAND
+    for i in range(left, 0, -1):
+        if grid[row][i] > 0:
+            lNeighbour = grid[row][i]
             break
-    while right != len(grid)-1:
-        right += 1
+        
+    # RIGHT ISLAND
+    for i in range(right, ncol):
         if grid[row][right] > 0:
             rNeighbour = grid[row][right]
             break
-    # Checking the above and below of the cell for any possible neighbours
-    while above != 0:
-        above -= 1
+        
+    # UP ISLAND
+    for i in range(above, 0, -1):
         if grid[above][col] > 0:
             aNeighbour = grid[above][col]
             break
-    while below != len(grid)-1:
-        below += 1
+    
+    # DOWN ISLAND
+    for i in range(below, nrow):
         if grid[below][col] > 0:
             bNeighbour = grid[below][col]
             break
     
+    # while left != 0:
+    #     left -= 1
+        
+    # while right != len(grid)-1:
+    #     right += 1
+    #     if grid[row][right] > 0:
+    #         rNeighbour = grid[row][right]
+    #         break
+    # # Checking the above and below of the cell for any possible neighbours
+    # while above != 0:
+    #     above -= 1
+        
+    # while below != len(grid)-1:
+    #     below += 1
+        
     print("Neighbours are", lNeighbour, rNeighbour, aNeighbour, bNeighbour) # Remove later
 
     # Might pass in the entire cells themselves instead of the value of the cells
@@ -70,6 +90,8 @@ def appendStack(stack, neighbours, row, col):
 
     '''
     Need to find a way to access the current and max capacity of the neighbours/cells
+    - taken the node: so we can access from the nodes itself later on!
+    
     capacityNb.sort()
 
     '''
