@@ -37,80 +37,16 @@ class IslandNode(node.Node):
     
     def __init__(self, row, col, map, nrow, ncol):
         super().__init__(row, col, map[row][col])
-        self.findNeighbours(row, col, map, nrow, ncol)
+        self.stack = []
+        self.adjList = []
+        # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
     
-    def findNeighbours(self, row, col, grid, nrow, ncol):
-        # initialisations
-        above = below = row - 1
-        left = right = col - 1
-        # If no neighbours are found, then it must be water
-        lNeighbour = rNeighbour = aNeighbour = bNeighbour = 0
-        # LEFT ISLAND
-        for i in range(left, 0, -1):
-            if grid[row][i] > 0:
-                lNeighbour = grid[row][i]
-                break   
-        # RIGHT ISLAND
-        for i in range(right, ncol):
-            if grid[row][right] > 0:
-                rNeighbour = grid[row][right]
-                break   
-        # UP ISLAND
-        for i in range(above, 0, -1):
-            if grid[above][col] > 0:
-                aNeighbour = grid[above][col]
-                break
+    def putStack(self, item):
+        self.stack.append(item)
         
-        # DOWN ISLAND
-        for i in range(below, nrow):
-            if grid[below][col] > 0:
-                bNeighbour = grid[below][col]
-                break
-
-        # TODO: THERES FOR SURE A BETTER WAY TO DO THIS LOL
-        neighbourList = []
-        if lNeighbour > 0:
-            neighbourList.append(lNeighbour)
-        
-        if rNeighbour > 0:
-            neighbourList.append(rNeighbour)
-            
-        if aNeighbour > 0:
-            neighbourList.append(aNeighbour)
-            
-        if bNeighbour > 0:
-            neighbourList.append(bNeighbour)
-
-        # neighbours = [lNeighbour, rNeighbour, aNeighbour, bNeighbour]
-        self.appendStack(neighbourList, row, col)
-        
-        pass
-
-    # TODO: append to Stack: also from Sophie's code
-    def appendStack(self, neighbours, row, col):
-        neighbours.sort()
-        
-        print(neighbours, " as of now")
-        '''
-        Need to find a way to access the current and max capacity of the neighbours/cells
-        - taken the node: so we can access from the nodes itself later on!
-        
-        capacityNb.sort()
-
-        '''
-
-        print("Sorted neighbours", neighbours) # Remove later
-
-        for i in range(len(neighbours)):
-            print("val now, ", i)
-            # Only including island neighbours
-            self.stack.append(neighbours[i])
-            
-        print("Stack is", self.stack) # Remove later
-
-        pass
-    
+    def popStack(self, item):
+        self.stack.pop(item)
     
     # getters
     def getStack(self): return self.stack
