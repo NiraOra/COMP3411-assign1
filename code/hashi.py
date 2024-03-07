@@ -1,16 +1,19 @@
 import numpy as np
 import sys
-from nodeDefs import node, valueDefs
+from nodeDefs import valueDefs, node
+import nodeInit
 
 def main():
     # get map
     nrow, ncol, map = scan_map()
     # get resultant dict
-    result = node.nodeInit(map)
+    result = nodeInit.nodeInit(map, nrow, ncol)
     # TEMP: just for debugging purposes
     debug(nrow, ncol, result)
     # print the map
     printE(nrow, ncol, map)
+    # for example, if we needed to add the bridgeNode to the islandNode
+    # we would call: oo interesting wait. how do we call the individual functions. hm
     
     
 # print map
@@ -27,7 +30,8 @@ def debug(nrow, ncol, dict):
     print("Dict as follows\n")
     for i in range(nrow):
         for j in range(ncol):
-            print("the value at the node {", i, j, "} is ", dict[(i, j)][1])
+            # here, ideally should be able to call the function in itself in the end
+            print("the value at the node {", i, j, "} is ", dict[(i, j)].getCurrCapacity())
       
 # 1st step: to scan the map  
 def scan_map():

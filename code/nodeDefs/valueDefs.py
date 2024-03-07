@@ -1,6 +1,6 @@
 # certain definitions we can use
 
-MAX_BRIDGE_CAPACITY = 3 
+MAX_BRIDGE_CAPACITY = 3
 WATER = " "
 SINGLE_HORIZONTAL = '-',
 SINGLE_VERTICAL = '|',
