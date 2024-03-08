@@ -33,8 +33,7 @@ def islNodesNeighbours(dict, nrow, ncol):
 # finds the neighbours accordingly
 def findNeighbours(object, grid, nrow, ncol):
         # initialisations
-        row = object.getRow()
-        col = object.getCol()
+        row, col = object.getPosition()
         # checking all 4 sides
         above = row
         below = row
@@ -57,7 +56,7 @@ def findNeighbours(object, grid, nrow, ncol):
                 # here, you can add all the bridges in i suppose. 
                 # OK just test. after putting in bridge it should print out the stuff
                 # yay
-                dict[(row, col)].putAdjList(grid[(row, i)])
+                # dict[(row, col)].putAdjList(grid[(row, i)])
                 pass
         # RIGHT ISLAND
         for i in range(right, ncol, 1):
@@ -69,7 +68,7 @@ def findNeighbours(object, grid, nrow, ncol):
                 neighbourList.append(dict[(row, i)])
                 break   
             else:
-                dict[(row, col)].putAdjList(grid[(row, i)])
+                # dict[(row, col)].putAdjList(grid[(row, i)])
                 pass
         
         # UP ISLAND
@@ -83,7 +82,7 @@ def findNeighbours(object, grid, nrow, ncol):
                 neighbourList.append(dict[(i, col)])
                 break
             else:
-                dict[(row, col)].putAdjList(grid[(i, col)])
+                # dict[(row, col)].putAdjList(grid[(i, col)])
                 pass
         
         # DOWN ISLAND
@@ -97,14 +96,14 @@ def findNeighbours(object, grid, nrow, ncol):
                 neighbourList.append(dict[(i, col)])
                 break
             else:
-                dict[(row, col)].putAdjList(grid[(i, col)])
+                # dict[(row, col)].putAdjList(grid[(i, col)])
                 pass
 
         # sort List over here ? -> based on island Capacity
         neighbourList = sorted(neighbourList, key=lambda x: x.getCurrCapacity())
         
         # print out the neighbour adjacency list
-        object.printAdjList() 
+        # object.printAdjList() 
         
         # append to stack
         appendStack(object, neighbourList)
@@ -119,5 +118,7 @@ def appendStack(object, neighbours):
         print("Islands nearby: ", neighbours[i].getCapacity())
         # Only including island neighbours
         object.putStack(neighbours[i])
+        
+    print("STACK DONE!")
     
     pass

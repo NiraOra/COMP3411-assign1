@@ -33,5 +33,13 @@ class Node:
         return self.getCapacity()
     
     # get row and col pair ?
-    def getRow(self): return self.row
-    def getCol(self): return self.col
+    def getPosition(self):
+        return (self.row, self.col)
+    
+    # for final printing :P
+    def printLook(self):
+        return self.currCapacity
+        # just overriding over island and other one !
+    
+    # def getRow(self): return self.row
+    # def getCol(self): return self.col

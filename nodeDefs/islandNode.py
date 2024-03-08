@@ -42,18 +42,19 @@ class IslandNode(node.Node):
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
     # 2. Add bridges later and then update capacity accordingly
-    
     # GOING WITH 2    
     def putAdjList(self, item):
         
-        # if the capacity is exceeded, then add to list
-        if self.currCapacity > self.maxCapacity:
+        # if the capacity is NOT exceeded, then add to list
+        if self.currCapacity >= self.maxCapacity or item.bridgeCheck() == False:
+            # that means the capacity is done. done
             return False
-            # there is no way I can do this
         
         self.adjList.append(item)
-        
-        
+        # add currCapacity of both bridge and island
+        self.updateCapacity()
+        item.updateCapacity()
+
         return True
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ", item.getCurrCapacity())
         
@@ -72,9 +73,12 @@ class IslandNode(node.Node):
     def getCurrCapacity(self):
         return super().getCurrCapacity()
     
+    # for printing 
+    def printLook(self):
+        return self.maxCapacity
     
     # TEMP: printing out the adjList
     def printAdjList(self):
         print("Adjacency list: ")
         for i in range(len(self.adjList)):
-            print(self.adjList[i].getRow(), ",", self.adjList[i].getCol())
+            print(self.adjList[i].getPosition())

@@ -9,21 +9,23 @@ def main():
     # get resultant dict
     result = nodeInit.nodeInit(map, nrow, ncol)
     # TEMP: just for debugging purposes
-    debug(nrow, ncol, result)
+    # debug(nrow, ncol, result)
+    # TO REMOVE: small test LOL
+    # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
+    # -> we can get the position directly (useful for map iteration for example)
+    # result = DFShashi(result) -> get a good result
     # print the map
     printE(nrow, ncol, result)
     
 # print map: now can print dictionary
 def printE(nrow, ncol, map):
-    code = ".123456789abc"
+    # code = ".123456789abc"
     print("\nMAP:")
     for r in range(nrow):
         for c in range(ncol):
-            temp = map[(r, c)].getCapacity()
-            if (temp == 0):
-                print(".", end=" ")
-            else: 
-                print(code[temp], end=" ")
+            # to change: once we add the bridge stuff
+            # temp = map[(r, c)].getCapacity()
+            print(map[(r, c)].printLook(), end=" ")
         print()
         
 # just for debugging purposes

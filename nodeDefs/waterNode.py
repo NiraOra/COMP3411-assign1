@@ -17,12 +17,16 @@ class WaterNode(node.Node):
         super().__init__(row, col, 0)
         # return self
     
+    # return true if the capacity is less than max capacity; otherwise return false
+    def bridgeCheck(self):
+        return self.currCapacity < self.bridgeMaxCapacity
+    
     # set the bridge type based on bridge made    
     def setBridge(self, smth, bridgeOrientation):
         # setting the bridge and also like. the capacity basically
         # um. this depends though hmm. maybe set it based on a thing that says its vertical or
         # horizontal
-        if self.bridgeCapacity <= 0:
+        if self.bridgeCheck() == False:
             print("No more!!!")
             # don't pass
             
@@ -60,3 +64,7 @@ class WaterNode(node.Node):
         return super().getCapacity()
     
     def getBridgeType(self): return self.bridgeType
+    
+    # for printing
+    def printLook(self):
+        return self.bridgeType
