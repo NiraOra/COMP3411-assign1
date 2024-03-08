@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import numpy as np
 import sys
-from nodeDefs import valueDefs as vd, node
 import nodeInit
 
 def main():

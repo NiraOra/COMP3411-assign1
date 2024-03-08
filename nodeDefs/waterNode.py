@@ -3,14 +3,14 @@ from nodeDefs import valueDefs as vd
 from nodeDefs import node
 
 class WaterNode(node.Node):
-    # 1. bridgeCapacity is 3; can't go beyond that
+    # 1. bridgeMaxCapacity is 3; can't go beyond that
     # 2. bridgeType: SINGLE, DOUBLE, TRIPLE or just water
     # get functions as well I suppose
 
     # TO_REMOVE: bridge Capacity as it already exists
     bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY
     # initial state
-    bridgeType = vd.WATER 
+    bridgeType = vd.WATER
 
     # initialise waterNode
     def __init__(self, row, col):
