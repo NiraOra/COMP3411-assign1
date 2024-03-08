@@ -1,6 +1,6 @@
 import numpy as np
 import sys
-from nodeDefs import valueDefs, node
+from nodeDefs import valueDefs as vd, node
 import nodeInit
 
 def main():
@@ -11,18 +11,19 @@ def main():
     # TEMP: just for debugging purposes
     debug(nrow, ncol, result)
     # print the map
-    printE(nrow, ncol, map)
-    # for example, if we needed to add the bridgeNode to the islandNode
-    # we would call: oo interesting wait. how do we call the individual functions. hm
+    printE(nrow, ncol, result)
     
-    
-# print map
+# print map: now can print dictionary
 def printE(nrow, ncol, map):
     code = ".123456789abc"
     print("\nMAP:")
     for r in range(nrow):
         for c in range(ncol):
-            print(code[map[r][c]],end=" ")
+            temp = map[(r, c)].getCapacity()
+            if (temp == 0):
+                print(".", end=" ")
+            else: 
+                print(code[temp], end=" ")
         print()
         
 # just for debugging purposes

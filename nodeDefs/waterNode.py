@@ -8,12 +8,12 @@ class WaterNode(node.Node):
     # get functions as well I suppose
 
     # TO_REMOVE: bridge Capacity as it already exists
-    bridgeCapacity = 0
+    bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY
     # initial state
     bridgeType = vd.WATER 
 
     # initialise waterNode
-    def __init__(self, row, col, capacity):
+    def __init__(self, row, col):
         super().__init__(row, col, 0)
         # return self
     
@@ -28,35 +28,35 @@ class WaterNode(node.Node):
             
         # DONE. maybe
         if bridgeOrientation == "horizontal":
-            if self.bridgeCapacity == 1:
+            if self.currCapacity == 1:
                 self.bridgeType = vd.SINGLE_HORIZONTAL
                 print("1")
-            elif self.bridgeCapacity == 2:
+            elif self.currCapacity == 2:
                 self.bridgeType =  vd.DOUBLE_HORIZONTAL
                 print("2")
-            elif self.bridgeCapacity == 3:
+            elif self.currCapacity == 3:
                 self.bridgeType = vd.TRIPLE_HORIZONTAL
                 print("3")
             pass
         else:
-            if self.bridgeCapacity == 1:
+            if self.currCapacity == 1:
                 self.bridgeType = vd.SINGLE_VERTICAL
                 print("1")
-            elif self.bridgeCapacity == 2:
+            elif self.currCapacity == 2:
                 self.bridgeType = vd.DOUBLE_VERTICAL
                 print("2")
-            elif self.bridgeCapacity == 3:
+            elif self.currCapacity == 3:
                 self.bridgeType = vd.TRIPLE_VERTICAL
                 print("3")
             pass
      
     # just to iterate capacity of the bridge   
-    def iterateCapacity(self):
-        self.bridgeCapacity = self.bridgeCapacity - 1
+    # def iterateCapacity(self):
+    #     self.bridgeCapacity = self.bridgeCapacity - 1
 
     # getters
     # overriding the main function
-    def getCurrCapacity(self):
-        return self.bridgeCapacity
+    def getCapacity(self):
+        return super().getCapacity()
     
     def getBridgeType(self): return self.bridgeType
