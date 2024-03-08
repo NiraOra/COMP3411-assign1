@@ -23,10 +23,23 @@ class Node:
     
     # iterate through capacity
     def updateCapacity(self):
-        self.capacity = self.capacity - 1
+        self.capacity = self.capacity + 1
         
     # all the getter functions
-    def getCurrCapacity(self): 
+    def getCapacity(self): 
         return self.currCapacity
-    def getRow(self): return self.row
-    def getCol(self): return self.col
+    
+    def getCurrCapacity(self):
+        return self.getCapacity()
+    
+    # get row and col pair ?
+    def getPosition(self):
+        return (self.row, self.col)
+    
+    # for final printing :P
+    def printLook(self):
+        return self.currCapacity
+        # just overriding over island and other one !
+    
+    # def getRow(self): return self.row
+    # def getCol(self): return self.col
