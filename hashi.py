@@ -17,7 +17,7 @@ def main():
     # result = DFShashi(result) -> get a good result
     # print the map
     printE(nrow, ncol, result)
-    
+
 # print map: now can print dictionary
 def printE(nrow, ncol, map):
     # code = ".123456789abc"
