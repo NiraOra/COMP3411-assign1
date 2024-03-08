@@ -1,8 +1,8 @@
-# COMP3411-assign1
-Repo just in case collab for assignment yay 
+# Code on here
 
-# Things to keep in mind
+- Idea: Node initialisation
 
-- need a makefile to compile the code
-- A C file hashi w extra files if necessary (to seperate the data structure definitions or smth like that)
-- anything else 
+                                NODE
+                        |                   |
+                    IslandNode              WaterNode
+                    - has stuff             - has stuff    
