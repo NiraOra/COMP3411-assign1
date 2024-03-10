@@ -50,7 +50,8 @@ def findNeighbours(object, grid, nrow, ncol):
             if i == col:
                 pass 
             elif isinstance(grid[(row, i)],  islN.IslandNode):
-                neighbourList.append(dict[(row, i)], "horizontal")
+                # make it a tuple ?
+                neighbourList.append(dict[(row, i)])
                 break   
             else:
                 # here, you can add all the bridges in i suppose. 
@@ -65,7 +66,7 @@ def findNeighbours(object, grid, nrow, ncol):
                 pass
             # otherwise
             elif isinstance(grid[(row, i)], islN.IslandNode):
-                neighbourList.append(dict[(row, i)], "horizontal")
+                neighbourList.append(dict[(row, i)])
                 break   
             else:
                 # dict[(row, col)].putAdjList(grid[(row, i)])
@@ -79,7 +80,7 @@ def findNeighbours(object, grid, nrow, ncol):
             # otherwise if
             elif isinstance(grid[(i, col)], islN.IslandNode):
                 # print("the thing up is in: ", above, col)
-                neighbourList.append(dict[(i, col)], "vertical")
+                neighbourList.append(dict[(i, col)])
                 break
             else:
                 # dict[(row, col)].putAdjList(grid[(i, col)])
@@ -93,7 +94,7 @@ def findNeighbours(object, grid, nrow, ncol):
             # otherwise
             elif isinstance(grid[(i, col)], islN.IslandNode):
                 # print("the thing down is in: ", below, col)
-                neighbourList.append(dict[(i, col)], "vertical")
+                neighbourList.append(dict[(i, col)])
                 break
             else:
                 # dict[(row, col)].putAdjList(grid[(i, col)])
