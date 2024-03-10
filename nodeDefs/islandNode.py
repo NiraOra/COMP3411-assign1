@@ -54,18 +54,17 @@ class IslandNode(node.Node):
         # add currCapacity of both bridge and island
         self.updateCapacity()
         item.updateCapacity()
+        # basically saying that no more bridges can be made as it is done
+        item.setChecks()
 
         return True
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ", item.getCurrCapacity())
         
     def removeFromAdjList(self, item):
-        # FIXME don't even need this. lol
-        for i in range(len(self.adjList)):
-            # check if same object; if yes then remove
-            if self.adjList[i] is item:
-                self.adjList.remove(i)
+        # just remove the item
+        self.adjList.remove(item)
                 
-    # getters
+    # getters: DO NOT NEED
     def getStack(self): return self.stack
     def getAdjList(self): return self.adjList
     def getCapacity(self):

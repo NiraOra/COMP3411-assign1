@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+# Solution
+# We implemented a hashi-puzzle solver using the 
+
+# EDGE CASES
+
+
 import numpy as np
 import sys
 import nodeInit

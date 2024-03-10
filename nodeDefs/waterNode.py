@@ -11,6 +11,10 @@ class WaterNode(node.Node):
     bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY
     # initial state
     bridgeType = vd.WATER
+    # Horizontal variable: check to see if horizontal connection is possible
+    horizontalCheck = True
+    # Vertical variable: check to see if  vertical connection is possible
+    verticalCheck = True
 
     # initialise waterNode
     def __init__(self, row, col):
@@ -58,7 +62,7 @@ class WaterNode(node.Node):
     # def iterateCapacity(self):
     #     self.bridgeCapacity = self.bridgeCapacity - 1
 
-    # getters
+    # getters: 
     # overriding the main function
     def getCapacity(self):
         return super().getCapacity()
