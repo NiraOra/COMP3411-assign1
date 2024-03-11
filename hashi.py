@@ -1,4 +1,4 @@
-#!/usr/bin/python3: Python used
+#!/usr/bin/python3: Python type used
 # Solution
 # We implemented a hashi-puzzle solver using the DFS backtracking method which involves
 # checking the adjacent islands to the current islands to see if there can be a potential SINGLE, DOUBLE or TRIPLE
@@ -31,27 +31,27 @@ def main():
     # print the map
     printE(nrow, ncol, result)
 
-# print map: now can print dictionary
-def printE(nrow, ncol, map):
+# print map: now can print grid
+def printE(nrow, ncol, grid):
     # code = ".123456789abc"
     print("\nMAP:")
     for r in range(nrow):
         for c in range(ncol):
             # to change: once we add the bridge stuff
             # temp = map[(r, c)].getCapacity()
-            print(map[(r, c)].printLook(), end=" ")
+            print(grid[(r, c)].printLook(), end=" ")
         print()
         
 # just for debugging purposes
-def debug(nrow, ncol, dict):
+def debug(nrow, ncol, grid):
     print("Dict as follows\n")
     for i in range(nrow):
         for j in range(ncol):
             # here, ideally should be able to call the function in itself in the end
-            print("the value at the node {", i, j, "} is ", dict[(i, j)].currCapacity)
+            print("the value at the node {", i, j, "} is ", grid[(i, j)].currCapacity)
 
 # 1st step: to scan the map  
-def scan_map():  # sourcery skip: avoid-builtin-shadow
+def scan_map():
     text = []
     for line in sys.stdin:
         row = []

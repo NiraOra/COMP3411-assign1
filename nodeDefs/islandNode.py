@@ -1,6 +1,6 @@
 # import valueDefs as vd
 # "island NODE"
-from nodeDefs import node
+from nodeDefs import node, valueDefs as vd
 # # FOR DFS: append the bridges based on the connected components   
 # # map maybe not needed but lmk. anyway
 # def bridgeAdj(bridgeNode, map):
@@ -25,11 +25,11 @@ class IslandNode(node.Node):
     # stack
     stack = []
     
-    def __init__(self, row, col, map, nrow, ncol):
+    def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
         self.stack = []
         self.adjList = []
-        self.maxCapacity = map[(row, col)]
+        self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
     
@@ -74,6 +74,12 @@ class IslandNode(node.Node):
     
     # for printing 
     def printLook(self):
+        if self.maxCapacity == 10:
+            return vd.A_DEF
+        elif self.maxCapacity == 11:
+            return vd.B_DEF
+        elif self.maxCapacity == 12:
+            return vd.C_DEF
         return self.maxCapacity
     
     # TEMP: printing out the adjList

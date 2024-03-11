@@ -9,9 +9,15 @@ def nodeInit(map, nrow, ncol):
             if  code[map[i][j]] == '.':
                 # initialise a water node
                 tempNode = watN.WaterNode(i, j)
+            elif map[i][j] == vd.A_DEF:
+                tempNode = islN.IslandNode(i, j, 10)
+            elif map[i][j] == vd.B_DEF:
+                tempNode = islN.IslandNode(i, j, 11)
+            elif map[i][j] == vd.C_DEF:
+                tempNode = islN.IslandNode(i, j, 12)
             else:
                 # initialise an island node
-                tempNode = islN.IslandNode(i, j, map, nrow, ncol)
+                tempNode = islN.IslandNode(i, j, map[i][j])
             # assign node to tempNode
             grid[(i, j)] = tempNode
             # print(grid[(i, j)].getCurrCapacity())
@@ -49,7 +55,7 @@ def findNeighbours(object, grid, nrow, ncol):
         # same case
         if i in [col, col - 1]:
             pass
-        elif isinstance(grid[(row, i)],  islN.IslandNode):
+        elif isinstance(grid[(row, i)], islN.IslandNode):
             # make it a tuple ?
             neighbourList.append(grid[(row, i)])
             break
@@ -76,7 +82,7 @@ def findNeighbours(object, grid, nrow, ncol):
         if i in [row, row + 1]:
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
-            # print("the thing down is in: ", below, col)
+            # print("the thing down is in: ", below, col, "and is: ", grid[(i, col)])
             neighbourList.append(grid[(i, col)])
             break
     # sort List over here ? -> based on island Capacity
