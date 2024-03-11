@@ -15,7 +15,10 @@ def main():
     grid = map
     dfsStack = []
 
-    case_one_neighbour()
+    # iterate through the grid and fill in the bridges for the special cases first
+    for i in range(0, nrow-1):
+        for j in range(0, ncol-1):
+            specialIslands(grid, i , j)
 
     DFSbacktracking(dfsStack, grid, nrow, ncol)
 
@@ -24,10 +27,10 @@ def main():
     # -> we can get the position directly (useful for map iteration for example)
     # result = DFShashi(result) -> get a good result
     # print the map
-    printE(nrow, ncol, result)
+    printMap(nrow, ncol, result)
     
 # print map: now can print dictionary
-def printE(nrow, ncol, map):
+def printMap(nrow, ncol, map):
     # code = ".123456789abc"
     print("\nMAP:")
     for r in range(nrow):
@@ -70,24 +73,41 @@ def scan_map():
     
     return nrow, ncol, map
 
-# If an only has one neighbour, then it must be connected
-# by the same number of bridges as the max capacity of the island
-def case_one_neighbour(grid, row, col):
-    if grid[row, col].Visited:
+# Filling in the islands which only have one certain bridge configuration possible
+def specialIslands(grid, row, col):
+    # only proceed if the node is an unvisited island node
+    if not isinstance(grid[(row, col)],islN.IslandNode):    
         return
-    # checking if the node has only one neighbour
-    elif len(grid[row, col].stack) == 1:
-        grid[row, col].Visited = True
-        buildBridge(grid[row, col].stack[0])
+    elif grid[(row, col)].Visited:
+        return
+    
+    numNeighbours = len(grid[(row, col)].stack)
+    islandCap = grid[(row, col)].maxCapacity
+    
+    # checking if the node has only one neighbour and
+    # island has capacity 1,2 or 3
+    if numNeighbours == 1 and islandCap in [1, 2, 3]:
+        numBridges = islandCap
+    # checking the number of neighbours for islands of size 6,9 or 12
+    elif (numNeighbours == 2 and islandCap == 6) \
+        or (numNeighbours == 3 and islandCap == 9) \
+        or (numNeighbours == 4 and islandCap == 12):
+        numBridges = 3
+    else: 
+        return
+    
+    # mark the island as visited
+    grid[(row, col)].Visited = True
+    # fill in the bridges between the island and its neighbours 
+    for i in range[0, numNeighbours-1]:
+        buildBridge(grid, grid[(row, col)], grid[(row, col)].stack[i], numBridges)
+    
     pass
-
-def case_two_neighbours():
-        pass
 
 # DFS backtracking function which iterates through the stack and 
 # attempts to connect the neighbours under the constraints.
 # If a constraint is violated, it backtracks and retries.
-def DFSbacktracking(grid, nrow, ncol):
+def DFSbacktracking(grid, nrow, ncol, dfsStack):
     if goalReached(): 
         return 
 
@@ -96,8 +116,8 @@ def DFSbacktracking(grid, nrow, ncol):
         row, col = findStart(grid, nrow, ncol)
 
     # Iterate through the stack and attempt to place down bridges
-    for i in islN.IslandNode.stack[i]:
-        neighbourRow, neighbourCol = islN.IslandNode.stack.pop()
+    for i in dfsStack[i]:
+        neighbourRow, neighbourCol = dfsStack.pop()
         if row == neighbourRow:
             col - neighbourCol
             pass
@@ -133,14 +153,41 @@ def goalReached():
         return True
     return False
 
-def buildBridge():
+def buildBridge(grid, object, endObject, numBridges):
+    row, col = object.row, object.col
+    endRow, endCol = endObject.row, endObject.col
+    left = up = -1
+    right = down = 1
     
-    pass
+    # building bridges to the right
+    if row == endRow and col < endCol: 
+        for i in range(col, endCol, right):
+            if isinstance(grid[(row, i)], islN.IslandNode):
+                continue
+            watN.setBridge(grid[(row, i)], numBridges, "horizontal")
+            grid[(row, i)].verticalCheck = False
+    # building bridges to the left
+    elif row == endRow and col > endCol:
+        for i in range(col, endCol, left):
+            if isinstance(grid[(row, i)], islN.IslandNode):
+                continue
+            watN.setBridge(grid[(row, i)], numBridges, "horizontal")
+            grid[(row, i)].verticalCheck = False
+    # building bridges downwards
+    elif col == endCol and row < endRow:
+        for i in range(row, endRow, down):
+            if isinstance(grid[(i, col)], islN.IslandNode):
+                continue
+            watN.setBridge(grid[(i, col)], numBridges, "vertical")
+            grid[(i, col)].horizontalCheck = False
+    # building bridges upwards
+    else: 
+        for i in range(row, endRow, up):
+            if isinstance(grid[(i, col)], islN.IslandNode):
+                continue
+            watN.setBridge(grid[(i, col)], numBridges, "vertical")
+            grid[(i, col)].horizontalCheck = False
 
-
-# TODO print the resultant map with all the appropriate bridges in place
-def printMap(map):
-    print()
     pass
 
 if __name__ == '__main__':
