@@ -47,7 +47,7 @@ def findNeighbours(object, grid, nrow, ncol):
         # LEFT ISLAND
         for i in range(left, -1, -1):
             # same case
-            if i == col:
+            if i == col or i == col - 1:
                 pass 
             elif isinstance(grid[(row, i)],  islN.IslandNode):
                 # make it a tuple ?
@@ -62,7 +62,7 @@ def findNeighbours(object, grid, nrow, ncol):
         # RIGHT ISLAND
         for i in range(right, ncol, 1):
             # case same
-            if i == col:
+            if i == col or i == col + 1:
                 pass
             # otherwise
             elif isinstance(grid[(row, i)], islN.IslandNode):
@@ -75,7 +75,7 @@ def findNeighbours(object, grid, nrow, ncol):
         # UP ISLAND
         for i in range(above, -1, -1):
             # same case
-            if i == row:
+            if i == row or i == row - 1:
                 pass
             # otherwise if
             elif isinstance(grid[(i, col)], islN.IslandNode):
@@ -89,7 +89,7 @@ def findNeighbours(object, grid, nrow, ncol):
         # DOWN ISLAND
         for i in range(below, nrow):
             # edge case
-            if i == row:
+            if i == row or i == row + 1:
                 pass
             # otherwise
             elif isinstance(grid[(i, col)], islN.IslandNode):
@@ -104,7 +104,7 @@ def findNeighbours(object, grid, nrow, ncol):
         neighbourList = sorted(neighbourList, key=lambda x: x.getCurrCapacity())
         
         # print out the neighbour adjacency list
-        # object.printAdjList() 
+        object.printAdjList() 
         
         # append to stack
         appendStack(object, neighbourList)
