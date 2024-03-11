@@ -1,7 +1,8 @@
 # import valueDefs as vd
 # "island NODE"
-from nodeDefs import node, valueDefs as vd
-# # FOR DFS: append the bridges based on the connected components   
+from nodeDefs import node
+from nodeDefs import valueDefs as vd
+# # FOR DFS: append the bridges based on the connected components
 # # map maybe not needed but lmk. anyway
 # def bridgeAdj(bridgeNode, map):
 #     # idea: just fill it up with the bridges ig ?
@@ -21,10 +22,10 @@ class IslandNode(node.Node):
     # if visited or not
     visited = False
     # fill this with neighbouring bridges as time passes
-    adjList = [] 
+    adjList = []
     # stack
     stack = []
-    
+
     def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
         self.stack = []
@@ -32,24 +33,23 @@ class IslandNode(node.Node):
         self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
-    
+
     def putStack(self, item):
         self.stack.append(item)
-        
+
     def popStack(self, item):
         self.stack.remove(item)
-        
+
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
     # 2. Add bridges later and then update capacity accordingly
-    # GOING WITH 2    
+    # GOING WITH 2
     def putAdjList(self, item):
-        
         # if the capacity is NOT exceeded, then add to list
-        if self.currCapacity >= self.maxCapacity or item.bridgeCheck() == False:
+        if self.currCapacity >= self.maxCapacity or not item.bridgeCheck():
             # that means the capacity is done. done
             return False
-        
+
         self.adjList.append(item)
         # add currCapacity of both bridge and island
         self.updateCapacity()
@@ -58,12 +58,12 @@ class IslandNode(node.Node):
         item.setChecks()
         # set that the bridge is made
         return True
-        # print("Hello it is me {", self.row, ",", self.col, "} with water node ", item.getCurrCapacity())
-        
+        # print("Hello it is me {", self.row, ",", self.col, "} with water node ",
+        # item.getCurrCapacity())
+
     def removeFromAdjList(self, item):
         # just remove the item
         self.adjList.remove(item)
-                
     # getters: DO NOT NEED
     # def getStack(self): return self.stack
     # def getAdjList(self): return self.adjList
@@ -71,8 +71,8 @@ class IslandNode(node.Node):
     #     return self.maxCapacity
     # def getCurrCapacity(self):
     #     return super().getCurrCapacity()
-    
-    # for printing 
+
+    # for printing
     def printLook(self):
         if self.maxCapacity == 10:
             return vd.A_DEF
@@ -81,7 +81,7 @@ class IslandNode(node.Node):
         elif self.maxCapacity == 12:
             return vd.C_DEF
         return self.maxCapacity
-    
+
     # TEMP: printing out the adjList
     def printAdjList(self):
         print("Adjacency list: ")
