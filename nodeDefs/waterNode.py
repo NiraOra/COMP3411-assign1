@@ -1,4 +1,4 @@
-# WaterNode
+# WaterNode test now
 from nodeDefs import valueDefs as vd
 from nodeDefs import node
 
