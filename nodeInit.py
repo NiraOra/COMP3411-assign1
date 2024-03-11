@@ -101,7 +101,7 @@ def findNeighbours(object, grid, nrow, ncol):
                 pass
 
         # sort List over here ? -> based on island Capacity
-        neighbourList = sorted(neighbourList, key=lambda x: x.getCurrCapacity())
+        neighbourList = sorted(neighbourList, key=lambda x: x.currCapacity)
         
         # print out the neighbour adjacency list
         object.printAdjList() 
@@ -116,7 +116,7 @@ def appendStack(object, neighbours):
     # print(object.getCurrCapacity(), "is the current island as of now")
 
     for i in range(len(neighbours)):
-        print("Islands nearby: ", neighbours[i].getCapacity())
+        print("Islands nearby: ", neighbours[i].maxCapacity)
         # Only including island neighbours
         object.putStack(neighbours[i])
         

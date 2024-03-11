@@ -26,15 +26,15 @@ class Node:
         self.capacity = self.capacity + 1
         
     # all the getter functions
-    def getCapacity(self): 
-        return self.currCapacity
+    # def getCapacity(self): 
+    #     return self.currCapacity
     
-    def getCurrCapacity(self):
-        return self.getCapacity()
+    # def getCurrCapacity(self):
+    #     return self.getCapacity()
     
-    # get row and col pair ?
-    def getPosition(self):
-        return (self.row, self.col)
+    # # get row and col pair ?
+    # def getPosition(self):
+    #     return (self.row, self.col)
     
     # for final printing :P
     def printLook(self):

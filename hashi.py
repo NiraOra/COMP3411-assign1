@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 # Solution
-# We implemented a hashi-puzzle solver using the 
+# We implemented a hashi-puzzle solver using the DFS backtracking method which involves
+# checking the adjacent islands to the current islands to see if there can be a potential SINGLE, DOUBLE or TRIPLE
+# bridge that can be built, be it horizontal or vertical
+# 
+# To do this, we chose to adopt the data structure consisting of a dictionary that can hold nodes meant for 
+# islands and water and recursively iterate through that dictionary.
+# IslandNode contain:
+# WaterNode contain:
 
 # EDGE CASES
 
@@ -40,7 +47,7 @@ def debug(nrow, ncol, dict):
     for i in range(nrow):
         for j in range(ncol):
             # here, ideally should be able to call the function in itself in the end
-            print("the value at the node {", i, j, "} is ", dict[(i, j)].getCurrCapacity())
+            print("the value at the node {", i, j, "} is ", dict[(i, j)].currCapacity)
       
 # 1st step: to scan the map  
 def scan_map():

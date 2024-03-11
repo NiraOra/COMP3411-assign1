@@ -57,6 +57,11 @@ class WaterNode(node.Node):
                 self.bridgeType = vd.TRIPLE_VERTICAL
                 print("3")
             pass
+        
+    # just to set that no more bridges can be formed
+    def setChecks(self):
+        self.horizontalCheck = False
+        self.verticalCheck = False
      
     # just to iterate capacity of the bridge   
     # def iterateCapacity(self):
@@ -64,10 +69,10 @@ class WaterNode(node.Node):
 
     # getters: 
     # overriding the main function
-    def getCapacity(self):
-        return super().getCapacity()
+    # def getCapacity(self):
+    #     return super().getCapacity()
     
-    def getBridgeType(self): return self.bridgeType
+    # def getBridgeType(self): return self.bridgeType
     
     # for printing
     def printLook(self):

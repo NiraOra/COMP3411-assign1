@@ -56,7 +56,7 @@ class IslandNode(node.Node):
         item.updateCapacity()
         # basically saying that no more bridges can be made as it is done
         item.setChecks()
-
+        # set that the bridge is made
         return True
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ", item.getCurrCapacity())
         
@@ -65,12 +65,12 @@ class IslandNode(node.Node):
         self.adjList.remove(item)
                 
     # getters: DO NOT NEED
-    def getStack(self): return self.stack
-    def getAdjList(self): return self.adjList
-    def getCapacity(self):
-        return self.maxCapacity
-    def getCurrCapacity(self):
-        return super().getCurrCapacity()
+    # def getStack(self): return self.stack
+    # def getAdjList(self): return self.adjList
+    # def getCapacity(self):
+    #     return self.maxCapacity
+    # def getCurrCapacity(self):
+    #     return super().getCurrCapacity()
     
     # for printing 
     def printLook(self):
