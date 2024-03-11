@@ -62,7 +62,7 @@ class WaterNode(node.Node):
     def setChecks(self):
         self.horizontalCheck = False
         self.verticalCheck = False
-     
+
     # just to iterate capacity of the bridge   
     # def iterateCapacity(self):
     #     self.bridgeCapacity = self.bridgeCapacity - 1

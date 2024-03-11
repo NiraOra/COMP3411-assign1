@@ -3,7 +3,7 @@ import queue
 import numpy as np
 from queue import PriorityQueue
 # # import valueDefs as vals
-# # Generic Node initialisation into the dict
+# # Generic Node initialization into the dict
 
 # # RETURN A DICTIONARY/grid OF DEFINITIONS AND ISLANDS AND STUFF.
 # # FIXME maybe idea: add the islands in a min priority queue like

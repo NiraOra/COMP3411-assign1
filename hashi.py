@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3: Python used
 # Solution
 # We implemented a hashi-puzzle solver using the DFS backtracking method which involves
 # checking the adjacent islands to the current islands to see if there can be a potential SINGLE, DOUBLE or TRIPLE
@@ -12,6 +12,7 @@
 # EDGE CASES
 
 
+import itertools
 import numpy as np
 import sys
 import nodeInit
@@ -48,9 +49,9 @@ def debug(nrow, ncol, dict):
         for j in range(ncol):
             # here, ideally should be able to call the function in itself in the end
             print("the value at the node {", i, j, "} is ", dict[(i, j)].currCapacity)
-      
+
 # 1st step: to scan the map  
-def scan_map():
+def scan_map():  # sourcery skip: avoid-builtin-shadow
     text = []
     for line in sys.stdin:
         row = []
@@ -68,10 +69,9 @@ def scan_map():
     ncol = len(text[0])
 
     map = np.zeros((nrow,ncol),dtype=np.int32)
-    for r in range(nrow):
-        for c in range(ncol):
-            map[r,c] = text[r][c]
-    
+    for r, c in itertools.product(range(nrow), range(ncol)):
+        map[r,c] = text[r][c]
+
     return nrow, ncol, map
 
 if __name__ == '__main__':
