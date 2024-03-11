@@ -57,7 +57,7 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
             # make it a tuple ?
-            neighbourList.append(grid[(row, i)])
+            neighbourList.append([grid[(row, i)], "horizontal"])
             break
     # RIGHT ISLAND
     for i in range(right, ncol):
@@ -65,7 +65,7 @@ def findNeighbours(object, grid, nrow, ncol):
         if i in [col, col + 1]:
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
-            neighbourList.append(grid[(row, i)])
+            neighbourList.append([grid[(row, i)], "horizontal"])
             break
     # UP ISLAND
     for i in range(above, -1, -1):
@@ -74,7 +74,7 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
             # print("the thing up is in: ", above, col)
-            neighbourList.append(grid[(i, col)])
+            neighbourList.append([grid[(i, col)], "vertical"])
             break
     # DOWN ISLAND
     for i in range(below, nrow):
@@ -83,13 +83,13 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
             # print("the thing down is in: ", below, col, "and is: ", grid[(i, col)])
-            neighbourList.append(grid[(i, col)])
+            neighbourList.append([grid[(i, col)], "vertical"])
             break
     # sort List over here ? -> based on island Capacity
-    neighbourList = sorted(neighbourList, key=lambda x: x.currCapacity)
+    neighbourList = sorted(neighbourList, key=lambda x: x[0].maxCapacity)
 
-    # print out the neighbour adjacency list
-    object.printAdjList() 
+    # # print out the neighbour adjacency list
+    # object.printAdjList() 
 
     # append to stack
     appendStack(object, neighbourList)
@@ -99,7 +99,7 @@ def appendStack(object, neighbours):
     # print(object.getCurrCapacity(), "is the current island as of now")
 
     for i in range(len(neighbours)):
-        print("Islands nearby: ", neighbours[i].maxCapacity)
+        print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
         # Only including island neighbours
         object.putStack(neighbours[i])
 
