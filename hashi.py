@@ -12,22 +12,31 @@ def main():
     # TEMP: just for debugging purposes
     # debug(nrow, ncol, result)
 
-    grid = map
+    grid = result
+    
+    # for testing
     dfsStack = []
+
+    i, j = findStart(grid, nrow, ncol, dfsStack)
+    print("start is at", i, j, )
+    print("starting neighbours", grid[(i, j)].stack)
+    print("dfs stack", dfsStack)
 
     # iterate through the grid and fill in the bridges for the special cases first
     for i in range(0, nrow-1):
         for j in range(0, ncol-1):
             specialIslands(grid, i , j)
 
-    DFSbacktracking(dfsStack, grid, nrow, ncol)
+    print("dfs stack after special cases", dfsStack)
+    
+    # DFSbacktracking(dfsStack, grid, nrow, ncol)
 
     # TO REMOVE: small test LOL
     # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
     # -> we can get the position directly (useful for map iteration for example)
     # result = DFShashi(result) -> get a good result
     # print the map
-    printMap(nrow, ncol, result)
+    printMap(nrow, ncol, grid)
     
 # print map: now can print dictionary
 def printMap(nrow, ncol, map):
@@ -73,12 +82,30 @@ def scan_map():
     
     return nrow, ncol, map
 
+# Function which finds the starting point for the search
+def findStart(grid, nrow, ncol, dfsStack):
+    # Iterate until we find the first island that is unvisited
+    startFound = False
+    for i in range(0, nrow-1):
+        for j in range(0, ncol-1):
+            if isinstance(grid[(i, j)], islN.IslandNode) and \
+                not grid[(i, j)].visited:
+                startFound = True
+                break
+        if startFound:
+            break 
+
+    # Append the start to the stack and find its neighbours
+    dfsStack.append(grid[(i,j)])
+    nodeInit.findNeighbours(grid[(i,j)], grid, nrow, ncol)
+    return i, j
+
 # Filling in the islands which only have one certain bridge configuration possible
 def specialIslands(grid, row, col):
     # only proceed if the node is an unvisited island node
     if not isinstance(grid[(row, col)],islN.IslandNode):    
         return
-    elif grid[(row, col)].Visited:
+    elif grid[(row, col)].visited:
         return
     
     numNeighbours = len(grid[(row, col)].stack)
@@ -97,62 +124,15 @@ def specialIslands(grid, row, col):
         return
     
     # mark the island as visited
-    grid[(row, col)].Visited = True
+    grid[(row, col)].visited = True
+
     # fill in the bridges between the island and its neighbours 
-    for i in range[0, numNeighbours-1]:
-        buildBridge(grid, grid[(row, col)], grid[(row, col)].stack[i], numBridges)
+    for i in range(0, numNeighbours-1):
+        buildBridge(grid, grid[(row, col)], grid[(row, col)].stack[i][0], numBridges)
     
     pass
 
-# DFS backtracking function which iterates through the stack and 
-# attempts to connect the neighbours under the constraints.
-# If a constraint is violated, it backtracks and retries.
-def DFSbacktracking(grid, nrow, ncol, dfsStack):
-    if goalReached(): 
-        return 
-
-    # If the stack is empty, find the new starting point
-    if len(islN.IslandNode.stack) == 0:
-        row, col = findStart(grid, nrow, ncol)
-
-    # Iterate through the stack and attempt to place down bridges
-    for i in dfsStack[i]:
-        neighbourRow, neighbourCol = dfsStack.pop()
-        if row == neighbourRow:
-            col - neighbourCol
-            pass
-        elif col == neighbourCol:
-            pass
-    pass
-
-# Function which finds the starting point for the search
-def findStart(grid, nrow, ncol):
-    # Iterate until we find the first island that is unvisited
-    for i in range(0, nrow):
-        for j in range(0, ncol):
-            if isinstance(grid[(i, j)], islN.IslandNode) and \
-                not grid[(i, j)].Visited:
-                # Append the start to the stack and find its neighbours
-                islN.IslandNode.stack.putStack(grid[(i,j)])
-                nodeInit.findNeighbours(grid[(i,j)], grid, nrow, ncol)
-                break
-    return i, j
-
-
-# Function which checks if the goal has been reached.
-def goalReached():
-    numSolved = 0
-    # End condition: if all the islands have been visited and
-    # their capacities are full.
-    for i in islN.IslandNode.adjList[i]: # iterating through all the adj list and not the neighbours? needs to check
-        if islN.getCurrCapacity(islN.IslandNode.adjList[i]) == islN.getCapacity(islN.IslandNode.adjList[i]) \
-            and islN.IslandNode.Visited:
-            numSolved += 1
-    # If all the adjacency lists are solved then the puzzle is complete
-    if (numSolved == i):
-        return True
-    return False
-
+# Function which builds bridges in the water nodes between islands
 def buildBridge(grid, object, endObject, numBridges):
     row, col = object.row, object.col
     endRow, endCol = endObject.row, endObject.col
@@ -189,6 +169,41 @@ def buildBridge(grid, object, endObject, numBridges):
             grid[(i, col)].horizontalCheck = False
 
     pass
+
+# DFS backtracking function which iterates through the stack and 
+# attempts to connect the neighbours under the constraints.
+# If a constraint is violated, it backtracks and retries.
+def DFSbacktracking(grid, nrow, ncol, dfsStack):
+    if goalReached(): 
+        return 
+
+    # If the stack is empty, find the new starting point
+    if len(dfsStack) == 0:
+        row, col = findStart(grid, nrow, ncol)
+
+    # Iterate through the stack and attempt to place down bridges
+    for i in dfsStack[i]:
+        neighbourRow, neighbourCol = dfsStack.pop()
+        if row == neighbourRow:
+            pass
+        elif col == neighbourCol:
+            pass
+    pass
+
+# Function which checks if the goal has been reached.
+def goalReached():
+    numSolved = 0
+    # End condition: if all the islands have been visited and
+    # their capacities are full.
+    for i in islN.IslandNode.adjList[i]: # iterating through all the adj list and not the neighbours? needs to check
+        if islN.getCurrCapacity(islN.IslandNode.adjList[i]) == islN.getCapacity(islN.IslandNode.adjList[i]) \
+            and islN.IslandNode.Visited:
+            numSolved += 1
+    # If all the adjacency lists are solved then the puzzle is complete
+    if (numSolved == i):
+        return True
+    return False
+
 
 if __name__ == '__main__':
     main()

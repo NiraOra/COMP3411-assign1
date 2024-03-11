@@ -32,7 +32,7 @@ class IslandNode(node.Node):
         self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
-    
+
     def putStack(self, item):
         self.stack.append(item)
         
