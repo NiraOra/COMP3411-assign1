@@ -3,7 +3,7 @@ import queue
 import numpy as np
 from queue import PriorityQueue
 # # import valueDefs as vals
-# # Generic Node initialisation into the dict
+# # Generic Node initialization into the dict
 
 # # RETURN A DICTIONARY/grid OF DEFINITIONS AND ISLANDS AND STUFF.
 # # FIXME maybe idea: add the islands in a min priority queue like
@@ -26,15 +26,15 @@ class Node:
         self.capacity = self.capacity + 1
         
     # all the getter functions
-    def getCapacity(self): 
-        return self.currCapacity
+    # def getCapacity(self): 
+    #     return self.currCapacity
     
-    def getCurrCapacity(self):
-        return self.getCapacity()
+    # def getCurrCapacity(self):
+    #     return self.getCapacity()
     
-    # get row and col pair ?
-    def getPosition(self):
-        return (self.row, self.col)
+    # # get row and col pair ?
+    # def getPosition(self):
+    #     return (self.row, self.col)
     
     # for final printing :P
     def printLook(self):

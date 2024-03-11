@@ -3,14 +3,18 @@ from nodeDefs import valueDefs as vd
 from nodeDefs import node
 
 class WaterNode(node.Node):
-    # 1. bridgeCapacity is 3; can't go beyond that
+    # 1. bridgeMaxCapacity is 3; can't go beyond that
     # 2. bridgeType: SINGLE, DOUBLE, TRIPLE or just water
     # get functions as well I suppose
 
     # TO_REMOVE: bridge Capacity as it already exists
     bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY
     # initial state
-    bridgeType = vd.WATER 
+    bridgeType = vd.WATER
+    # Horizontal variable: check to see if horizontal connection is possible
+    horizontalCheck = True
+    # Vertical variable: check to see if  vertical connection is possible
+    verticalCheck = True
 
     # initialise waterNode
     def __init__(self, row, col):
@@ -53,17 +57,22 @@ class WaterNode(node.Node):
                 self.bridgeType = vd.TRIPLE_VERTICAL
                 print("3")
             pass
-     
+        
+    # just to set that no more bridges can be formed
+    def setChecks(self):
+        self.horizontalCheck = False
+        self.verticalCheck = False
+
     # just to iterate capacity of the bridge   
     # def iterateCapacity(self):
     #     self.bridgeCapacity = self.bridgeCapacity - 1
 
-    # getters
+    # getters: 
     # overriding the main function
-    def getCapacity(self):
-        return super().getCapacity()
+    # def getCapacity(self):
+    #     return super().getCapacity()
     
-    def getBridgeType(self): return self.bridgeType
+    # def getBridgeType(self): return self.bridgeType
     
     # for printing
     def printLook(self):

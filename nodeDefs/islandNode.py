@@ -1,6 +1,6 @@
 # import valueDefs as vd
 # "island NODE"
-from nodeDefs import node
+from nodeDefs import node, valueDefs as vd
 # # FOR DFS: append the bridges based on the connected components   
 # # map maybe not needed but lmk. anyway
 # def bridgeAdj(bridgeNode, map):
@@ -25,11 +25,11 @@ class IslandNode(node.Node):
     # stack
     stack = []
     
-    def __init__(self, row, col, map, nrow, ncol):
+    def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
         self.stack = []
         self.adjList = []
-        self.maxCapacity = map[(row, col)]
+        self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
     
@@ -54,27 +54,32 @@ class IslandNode(node.Node):
         # add currCapacity of both bridge and island
         self.updateCapacity()
         item.updateCapacity()
-
+        # basically saying that no more bridges can be made as it is done
+        item.setChecks()
+        # set that the bridge is made
         return True
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ", item.getCurrCapacity())
         
     def removeFromAdjList(self, item):
-        # FIXME don't even need this. lol
-        for i in range(len(self.adjList)):
-            # check if same object; if yes then remove
-            if self.adjList[i] is item:
-                self.adjList.remove(i)
+        # just remove the item
+        self.adjList.remove(item)
                 
-    # getters
-    def getStack(self): return self.stack
-    def getAdjList(self): return self.adjList
-    def getCapacity(self):
-        return self.maxCapacity
-    def getCurrCapacity(self):
-        return super().getCurrCapacity()
+    # getters: DO NOT NEED
+    # def getStack(self): return self.stack
+    # def getAdjList(self): return self.adjList
+    # def getCapacity(self):
+    #     return self.maxCapacity
+    # def getCurrCapacity(self):
+    #     return super().getCurrCapacity()
     
     # for printing 
     def printLook(self):
+        if self.maxCapacity == 10:
+            return vd.A_DEF
+        elif self.maxCapacity == 11:
+            return vd.B_DEF
+        elif self.maxCapacity == 12:
+            return vd.C_DEF
         return self.maxCapacity
     
     # TEMP: printing out the adjList
