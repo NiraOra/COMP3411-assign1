@@ -102,6 +102,9 @@ def findStart(grid, nrow, ncol, dfsStack):
     dfsStack.append(grid[(row, col)])
     for i in range(0, len(grid[(row, col)].stack)):
         dfsStack.append(grid[(row, col)].stack[i])
+    # Mark the starting island as visited
+    grid[(row, col)].visited = True
+    
     return row, col
 
 # Filling in the islands which only have one certain bridge configuration possible
@@ -142,9 +145,13 @@ def buildBridge(grid, object, endObject, numBridges):
     endRow, endCol = endObject.row, endObject.col
     left = up = -1
     right = down = 1
-    
+
+    # if the capacities are already at max or will overflow after adding
+    # the bridges, then return early
+    if not updateCapacity(object, endObject, numBridges):
+        return False
     # building bridges to the right
-    if row == endRow and col < endCol: 
+    elif row == endRow and col < endCol: 
         for i in range(col, endCol, right):
             if isinstance(grid[(row, i)], islN.IslandNode):
                 continue
@@ -173,6 +180,34 @@ def buildBridge(grid, object, endObject, numBridges):
             grid[(i, col)].horizontalCheck = False
 
     pass
+
+# Checks if the capacity of the given islands is overfilled
+# Returns true if it is a valid capacity and false if it is overfilled.
+def validCapacity(object, endObject, numBridges):
+    objectNewCap = object.currentCapacity + numBridges
+    endObjectNewCap = endObject.currentCapacity + numBridges
+
+    # If the current capacity of the islands is already overflowing
+    # then return false 
+    if object.currentCapacity > object.maxCapacity or \
+    endObject.currentCapacity > endObject.maxCapacity:
+        return False
+    # Else if the capacity of the islands after adding the bridges
+    # will be overflowing then return false
+    elif objectNewCap > object.maxCapacity or \
+    endObjectNewCap > endObject.maxCapacity:
+        return False
+    else:
+        return True
+
+# Updates the capacity of the island and its neighbour. 
+def updateCapacity(object, endObject, numBridges):
+    if validCapacity(object, endObject, numBridges):
+        object.currentCapacity += numBridges
+        endObject.currentCapacity += numBridges
+        return True
+    else:
+        return False
 
 # DFS backtracking function which iterates through the stack and 
 # attempts to connect the neighbours under the constraints.
@@ -206,19 +241,22 @@ def goalReached(grid, nrow, ncol):
     numIslands = 0
     # End condition: if all the islands have been visited and
     # their capacities are full.
-    for i in range(0, nrow): # iterating through all the adj list and not the neighbours? needs to check
+    for i in range(0, nrow):
         for j in range(0, ncol):
             if isinstance(grid[(i, j)], islN.IslandNode):
                 numIslands += 1
-                if grid[(i, j)].visited: 
+                object = grid[(i, j)]
+                if object.visited and object.currentCapacity == object.maxCapacity: 
                     numSolved += 1
-    # If all the adjacency lists are solved then the puzzle is complete
+                    print("This is island", object.maxCapacity, "and it has current capacity:", object.currentCapacity)
+    
     print("Number of solved islands is", numSolved, "and Total number of islands is", numIslands)
-
+    # If the number of solved islands is equal to the total number of islands,
+    # then the puzzle is solved.
     if (numSolved == numIslands):
         return True
-    return False
-
+    else: 
+        return False
 
 if __name__ == '__main__':
     main()
