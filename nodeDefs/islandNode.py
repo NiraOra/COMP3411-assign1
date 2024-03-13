@@ -23,12 +23,9 @@ class IslandNode(node.Node):
     visited = False
     # fill this with neighbouring bridges as time passes
     adjList = []
-    # adjList
-    adjList = []
 
     def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
-        self.adjList = []
         self.adjList = []
         self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
@@ -85,17 +82,6 @@ class IslandNode(node.Node):
     #     self.currCapacity = 0
     #     return False
 
-    def removeFromAdjList(self, item):
-        # just remove the item
-        self.adjList.remove(item)
-    # getters: DO NOT NEED
-    # def getStack(self): return self.adjList
-    # def getAdjList(self): return self.adjList
-    # def getCapacity(self):
-    #     return self.maxCapacity
-    # def getCurrCapacity(self):
-    #     return super().getCurrCapacity()
-
     # for printing
     def printLook(self):
         if self.maxCapacity == 10:
@@ -110,4 +96,4 @@ class IslandNode(node.Node):
     def printAdjList(self):
         print("Adjacency list: ")
         for i in range(len(self.adjList)):
-            print(self.adjList[i].getPosition())
+            print(self.adjList[i][0].row, self.adjList[i][0].col)
