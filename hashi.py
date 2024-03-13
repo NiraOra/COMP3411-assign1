@@ -1,16 +1,4 @@
-#!/usr/bin/python3: Python type used
-# Solution
-# We implemented a hashi-puzzle solver using the DFS backtracking method which involves
-# checking the adjacent islands to the current islands to see if there can be a potential SINGLE, DOUBLE or TRIPLE
-# bridge that can be built, be it horizontal or vertical
-# 
-# To do this, we chose to adopt the data structure consisting of a dictionary that can hold nodes meant for 
-# islands and water and recursively iterate through that dictionary.
-# IslandNode contain:
-# WaterNode contain:
-
-# EDGE CASES
-
+#!/usr/bin/python3
 import numpy as np
 import sys
 import nodeInit
@@ -26,22 +14,25 @@ def main():
 
     grid = result
     
-    # for testing
     dfsStack = []
 
-    i, j = findStart(grid, nrow, ncol, dfsStack)
-    print("start is at", i, j, )
-    print("starting neighbours", grid[(i, j)].stack)
-    print("dfs stack", dfsStack)
-
     # iterate through the grid and fill in the bridges for the special cases first
-    for i in range(0, nrow-1):
-        for j in range(0, ncol-1):
+    for i in range(0, nrow):
+        for j in range(0, ncol):
             specialIslands(grid, i , j)
 
-    print("dfs stack after special cases", dfsStack)
+    i, j = findStart(grid, nrow, ncol, dfsStack)
+
+    print("starting neighbours", grid[(i, j)].stack)
+    print("dfs stack", dfsStack)
+    
     
     # DFSbacktracking(dfsStack, grid, nrow, ncol)
+
+    if goalReached(grid, nrow, ncol):
+        print("puzzle is FINISHED!")
+    else:
+        print("puzzle is NOT finished!")
 
     # TO REMOVE: small test LOL
     # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
@@ -98,19 +89,23 @@ def scan_map():
 def findStart(grid, nrow, ncol, dfsStack):
     # Iterate until we find the first island that is unvisited
     startFound = False
-    for i in range(0, nrow-1):
-        for j in range(0, ncol-1):
-            if isinstance(grid[(i, j)], islN.IslandNode) and \
-                not grid[(i, j)].visited:
+    for row in range(0, nrow):
+        for col in range(0, ncol):
+            if isinstance(grid[(row, col)], islN.IslandNode) and \
+                not grid[(row, col)].visited:
                 startFound = True
                 break
         if startFound:
             break 
 
-    # Append the start to the stack and find its neighbours
-    dfsStack.append(grid[(i,j)])
-    nodeInit.findNeighbours(grid[(i,j)], grid, nrow, ncol)
-    return i, j
+    # Append the starting island and its neighbours to the DFS Stack
+    dfsStack.append(grid[(row, col)])
+    for i in range(0, len(grid[(row, col)].stack)):
+        dfsStack.append(grid[(row, col)].stack[i])
+    # Mark the starting island as visited
+    grid[(row, col)].visited = True
+    
+    return row, col
 
 # Filling in the islands which only have one certain bridge configuration possible
 def specialIslands(grid, row, col):
@@ -139,7 +134,7 @@ def specialIslands(grid, row, col):
     grid[(row, col)].visited = True
 
     # fill in the bridges between the island and its neighbours 
-    for i in range(0, numNeighbours-1):
+    for i in range(0, numNeighbours):
         buildBridge(grid, grid[(row, col)], grid[(row, col)].stack[i][0], numBridges)
     
     pass
@@ -150,37 +145,69 @@ def buildBridge(grid, object, endObject, numBridges):
     endRow, endCol = endObject.row, endObject.col
     left = up = -1
     right = down = 1
-    
+
+    # if the capacities are already at max or will overflow after adding
+    # the bridges, then return early
+    if not updateCapacity(object, endObject, numBridges):
+        return False
     # building bridges to the right
-    if row == endRow and col < endCol: 
+    elif row == endRow and col < endCol: 
         for i in range(col, endCol, right):
             if isinstance(grid[(row, i)], islN.IslandNode):
                 continue
-            watN.setBridge(grid[(row, i)], numBridges, "horizontal")
+            grid[(row, i)].setBridge(numBridges, "horizontal")
             grid[(row, i)].verticalCheck = False
     # building bridges to the left
     elif row == endRow and col > endCol:
         for i in range(col, endCol, left):
             if isinstance(grid[(row, i)], islN.IslandNode):
                 continue
-            watN.setBridge(grid[(row, i)], numBridges, "horizontal")
+            grid[(row, i)].setBridge(numBridges, "horizontal")
             grid[(row, i)].verticalCheck = False
     # building bridges downwards
     elif col == endCol and row < endRow:
         for i in range(row, endRow, down):
             if isinstance(grid[(i, col)], islN.IslandNode):
                 continue
-            watN.setBridge(grid[(i, col)], numBridges, "vertical")
+            grid[(i, col)].setBridge(numBridges, "vertical")
             grid[(i, col)].horizontalCheck = False
     # building bridges upwards
     else: 
         for i in range(row, endRow, up):
             if isinstance(grid[(i, col)], islN.IslandNode):
                 continue
-            watN.setBridge(grid[(i, col)], numBridges, "vertical")
+            grid[(i, col)].setBridge(numBridges, "vertical")
             grid[(i, col)].horizontalCheck = False
 
     pass
+
+# Checks if the capacity of the given islands is overfilled
+# Returns true if it is a valid capacity and false if it is overfilled.
+def validCapacity(object, endObject, numBridges):
+    objectNewCap = object.currentCapacity + numBridges
+    endObjectNewCap = endObject.currentCapacity + numBridges
+
+    # If the current capacity of the islands is already overflowing
+    # then return false 
+    if object.currentCapacity > object.maxCapacity or \
+    endObject.currentCapacity > endObject.maxCapacity:
+        return False
+    # Else if the capacity of the islands after adding the bridges
+    # will be overflowing then return false
+    elif objectNewCap > object.maxCapacity or \
+    endObjectNewCap > endObject.maxCapacity:
+        return False
+    else:
+        return True
+
+# Updates the capacity of the island and its neighbour. 
+def updateCapacity(object, endObject, numBridges):
+    if validCapacity(object, endObject, numBridges):
+        object.currentCapacity += numBridges
+        endObject.currentCapacity += numBridges
+        return True
+    else:
+        return False
 
 # DFS backtracking function which iterates through the stack and 
 # attempts to connect the neighbours under the constraints.
@@ -193,7 +220,13 @@ def DFSbacktracking(grid, nrow, ncol, dfsStack):
     if len(dfsStack) == 0:
         row, col = findStart(grid, nrow, ncol)
 
+    constraint = False
     # Iterate through the stack and attempt to place down bridges
+    neighbour = dfsStack.pop()
+    buildBridge(grid, object, neighbour)
+    if not constraint:
+        DFSbacktracking(grid, nrow, ncol, dfsStack)
+
     for i in dfsStack[i]:
         neighbourRow, neighbourCol = dfsStack.pop()
         if row == neighbourRow:
@@ -203,19 +236,27 @@ def DFSbacktracking(grid, nrow, ncol, dfsStack):
     pass
 
 # Function which checks if the goal has been reached.
-def goalReached():
+def goalReached(grid, nrow, ncol):
     numSolved = 0
+    numIslands = 0
     # End condition: if all the islands have been visited and
     # their capacities are full.
-    for i in islN.IslandNode.adjList[i]: # iterating through all the adj list and not the neighbours? needs to check
-        if islN.getCurrCapacity(islN.IslandNode.adjList[i]) == islN.getCapacity(islN.IslandNode.adjList[i]) \
-            and islN.IslandNode.Visited:
-            numSolved += 1
-    # If all the adjacency lists are solved then the puzzle is complete
-    if (numSolved == i):
+    for i in range(0, nrow):
+        for j in range(0, ncol):
+            if isinstance(grid[(i, j)], islN.IslandNode):
+                numIslands += 1
+                object = grid[(i, j)]
+                if object.visited and object.currentCapacity == object.maxCapacity: 
+                    numSolved += 1
+                    print("This is island", object.maxCapacity, "and it has current capacity:", object.currentCapacity)
+    
+    print("Number of solved islands is", numSolved, "and Total number of islands is", numIslands)
+    # If the number of solved islands is equal to the total number of islands,
+    # then the puzzle is solved.
+    if (numSolved == numIslands):
         return True
-    return False
-
+    else: 
+        return False
 
 if __name__ == '__main__':
     main()

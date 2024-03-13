@@ -26,7 +26,7 @@ class WaterNode(node.Node):
         return self.currCapacity < self.bridgeMaxCapacity
     
     # set the bridge type based on bridge made    
-    def setBridge(self, smth, bridgeOrientation):
+    def setBridge(self, numBridges, bridgeOrientation):
         # setting the bridge and also like. the capacity basically
         # um. this depends though hmm. maybe set it based on a thing that says its vertical or
         # horizontal
@@ -36,24 +36,24 @@ class WaterNode(node.Node):
             
         # DONE. maybe
         if bridgeOrientation == "horizontal":
-            if self.currCapacity == 1:
+            if numBridges == 1:
                 self.bridgeType = vd.SINGLE_HORIZONTAL
                 print("1")
-            elif self.currCapacity == 2:
+            elif numBridges == 2:
                 self.bridgeType =  vd.DOUBLE_HORIZONTAL
                 print("2")
-            elif self.currCapacity == 3:
+            elif numBridges == 3:
                 self.bridgeType = vd.TRIPLE_HORIZONTAL
                 print("3")
             pass
         else:
-            if self.currCapacity == 1:
+            if numBridges == 1:
                 self.bridgeType = vd.SINGLE_VERTICAL
                 print("1")
-            elif self.currCapacity == 2:
+            elif numBridges == 2:
                 self.bridgeType = vd.DOUBLE_VERTICAL
                 print("2")
-            elif self.currCapacity == 3:
+            elif numBridges == 3:
                 self.bridgeType = vd.TRIPLE_VERTICAL
                 print("3")
             pass

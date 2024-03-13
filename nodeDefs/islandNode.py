@@ -39,6 +39,10 @@ class IslandNode(node.Node):
 
     def popStack(self, item):
         self.stack.remove(item)
+        
+    def printDebugStack(self):
+        for i in range(len(self.stack)):
+            print ("Here: ", self.stack[i][0].maxCapacity)
 
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
@@ -60,6 +64,26 @@ class IslandNode(node.Node):
         return True
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ",
         # item.getCurrCapacity())
+    
+    # CHECK_NEIGHBOURS
+    # def dfsNeighbour(self, grid, nrow, ncol):
+    #     if self.currCapacity == self.maxCapacity:
+    #         return True
+        
+    #     self.visited = True
+        
+    #     for neighbour in self.stack:
+    #         if not neighbour.visited:
+    #             if neighbour.maxCapacity - neighbour.currCapacity > 1 and self.currCapacity + 1 <= self.maxCapacity:
+    #                 neighbour.updateCapacity()
+    #                 if neighbour.dfsNeighbour(grid, nrow, ncol):
+    #                     return True
+    #                 # bridge built
+    #                 neighbour.currCapacity = neighbour.currCapacity - 1
+                    
+    #     self.visited = False
+    #     self.currCapacity = 0
+    #     return False
 
     def removeFromAdjList(self, item):
         # just remove the item
