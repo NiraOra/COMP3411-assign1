@@ -28,8 +28,8 @@ def main():
     else: 
         print('We continue')
         # print("starting neighbours", grid[(i, j)].adjList)
-        print("dfs adjList", dfsStack)
-        DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
+        # print("dfs adjList", dfsStack)
+        # DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
         # if goalReached(grid, nrow, ncol):
         #     print("puzzle is FINISHED!")
         # else:
@@ -226,36 +226,61 @@ def DFSbacktracking(currNode, grid, nrow, ncol, dfsStack):
     # If the adjList is empty, find the new starting point and update stack
     # with neighbours of such an array
     # NOT NEEDED: we are taking care of this initially so. either way it is alright
-    if len(currNode.adjList) == 0:
-        currNode.visited = True
+    if len(dfsStack) == 0:
+        # currNode.visited = True
         _, row, col, dfsStack = findStart(grid, nrow, ncol, dfsStack)
-    else:
-        row, col = dfsStack[0].row, dfsStack[0].col
+        currNode = grid[(row, col)]
+
     # array to keep track of all the nodes visited
-    print(row, col)
+    # print(row, col)
     
-    visited = [grid[(row, col)]]
-    dfsStack.append(grid[(row, col)].adjList)
-    dfsStack[0].printAdjList()
-
+    visited = [currNode]
+    
+    # wait
+    # print(dfsStack)
+    # dfsStack[0].printAdjList()
+    
     for i in range(1, len(dfsStack)):
-        # get the neighbours of curr node
-        print("curr stuff is ", i, "and node is ", dfsStack[i])
-        temp = dfsStack[i][0].adjList
-        dfsStack[i][0].visited = True
-        visited.append(dfsStack[i])
-        # if there is no more, then finished!
-        if DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack):
+        # if there is no more, then return that it has been reached
+        # TODO: ASSUMING THAT THERE IS ALWAYS A SOLUTION
+        if len(visited) == 0: return True
+        
+        # otherwise, append
+        neighbour = dfsStack[i][0]
+        visited.append(neighbour)
+        neighbour.visited = True
+        # if there is only one answer and this works then backtrack and return
+        if len(neighbour.adjList) == 1 and neighbour.adjList[0].eq(currNode):
+            # build towards the very end
+            backtrackBuild(grid, visited, 1)
+            dfsStack.remove(neighbour)
+            dfsStack.remove(currNode)
             return True
-        if len(temp) == 1: # the only neighbour existing in s is the one of the dfsStack
-            visited = backtrackBuild(grid, visited, i)
-            if len(visited) == 0:
-                # remove everything and then return true
-                dfsStack.pop()
-                return True
-            else:
-                DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack)
+        else:
+        # if the neighbour passes the backtracking thing. then return true
+            DFSbacktracking(neighbour, grid, nrow, ncol, dfsStack)
+        # print(visited)
+        
 
+    # for i in range(1, len(dfsStack)):
+    #     # get the neighbours of curr node
+    #     print("curr stuff is ", i, "and node is ", dfsStack[i])
+    #     temp = dfsStack[i][0].adjList
+    #     dfsStack[i][0].visited = True
+    #     visited.append(dfsStack[i])
+    #     # if there is no more, then finished!
+    #     if DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack):
+    #         return True
+    #     if len(temp) == 1: # the only neighbour existing in s is the one of the dfsStack
+    #         visited = backtrackBuild(grid, visited, i)
+    #         if len(visited) == 0:
+    #             # remove everything and then return true
+    #             dfsStack.pop()
+    #             return True
+    #         else:
+    #             DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack)
+
+    # return False
     return False
 
     # for s in dfsStack:
