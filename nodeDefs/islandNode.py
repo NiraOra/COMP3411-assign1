@@ -23,26 +23,26 @@ class IslandNode(node.Node):
     visited = False
     # fill this with neighbouring bridges as time passes
     adjList = []
-    # stack
-    stack = []
+    # adjList
+    adjList = []
 
     def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
-        self.stack = []
+        self.adjList = []
         self.adjList = []
         self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
 
     def putStack(self, item):
-        self.stack.append(item)
+        self.adjList.append(item)
 
     def popStack(self, item):
-        self.stack.remove(item)
+        self.adjList.remove(item)
         
     def printDebugStack(self):
-        for i in range(len(self.stack)):
-            print ("Here: ", self.stack[i][0].maxCapacity)
+        for i in range(len(self.adjList)):
+            print ("Here: ", self.adjList[i][0].maxCapacity)
 
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
@@ -72,7 +72,7 @@ class IslandNode(node.Node):
         
     #     self.visited = True
         
-    #     for neighbour in self.stack:
+    #     for neighbour in self.adjList:
     #         if not neighbour.visited:
     #             if neighbour.maxCapacity - neighbour.currCapacity > 1 and self.currCapacity + 1 <= self.maxCapacity:
     #                 neighbour.updateCapacity()
@@ -89,7 +89,7 @@ class IslandNode(node.Node):
         # just remove the item
         self.adjList.remove(item)
     # getters: DO NOT NEED
-    # def getStack(self): return self.stack
+    # def getStack(self): return self.adjList
     # def getAdjList(self): return self.adjList
     # def getCapacity(self):
     #     return self.maxCapacity

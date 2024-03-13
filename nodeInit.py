@@ -46,7 +46,7 @@ def findNeighbours(object, grid, nrow, ncol):
     left = col
     right = col
 
-    # list of neighbours to add to stack
+    # list of neighbours to add to adjList
     neighbourList = []
 
     # append if island exists
@@ -91,7 +91,7 @@ def findNeighbours(object, grid, nrow, ncol):
     # # print out the neighbour adjacency list
     # object.printAdjList() 
 
-    # append to stack
+    # append to adjList
     appendStack(object, neighbourList)
 
 # TODO: append to Stack: also from Sophie's code

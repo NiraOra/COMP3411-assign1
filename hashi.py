@@ -27,8 +27,8 @@ def main():
          print("puzzle is FINISHED we are lit!")
     else: 
         print('We continue')
-    # print("starting neighbours", grid[(i, j)].stack)
-    # print("dfs stack", dfsStack)
+    # print("starting neighbours", grid[(i, j)].adjList)
+    # print("dfs adjList", dfsStack)
     # DFSbacktracking(dfsStack, grid, nrow, ncol)
         if goalReached(grid, nrow, ncol):
             print("puzzle is FINISHED!")
@@ -108,8 +108,8 @@ def findStart(grid, nrow, ncol, dfsStack):
     if startRow != -1 and startCol != -1:
         print("111 ", startRow, startCol)
         dfsStack.append(grid[(startRow, startCol)])
-        for i in range(len(grid[(startRow, startCol)].stack)):
-            dfsStack.append(grid[(startRow, startCol)].stack[i])
+        for i in range(len(grid[(startRow, startCol)].adjList)):
+            dfsStack.append(grid[(startRow, startCol)].adjList[i])
         # Mark the starting island as visited
         grid[(startRow, startCol)].visited = True
         return True, startRow, startCol, dfsStack
@@ -127,7 +127,7 @@ def specialIslands(grid, row, col):
     elif grid[(row, col)].visited:
         return
     
-    numNeighbours = len(grid[(row, col)].stack)
+    numNeighbours = len(grid[(row, col)].adjList)
     islandCap = grid[(row, col)].maxCapacity
     
     # checking if the node has only one neighbour and
@@ -147,7 +147,7 @@ def specialIslands(grid, row, col):
 
     # fill in the bridges between the island and its neighbours 
     for i in range(0, numNeighbours):
-        buildBridge(grid, grid[(row, col)], grid[(row, col)].stack[i][0], numBridges)
+        buildBridge(grid, grid[(row, col)], grid[(row, col)].adjList[i][0], numBridges)
     
     pass
 
@@ -221,19 +221,19 @@ def updateCapacity(object, endObject, numBridges):
     else:
         return False
 
-# DFS backtracking function which iterates through the stack and 
+# DFS backtracking function which iterates through the adjList and 
 # attempts to connect the neighbours under the constraints.
 # If a constraint is violated, it backtracks and retries.
 def DFSbacktracking(grid, nrow, ncol, dfsStack):
     if goalReached(): 
         return 
 
-    # If the stack is empty, find the new starting point
+    # If the adjList is empty, find the new starting point
     if len(dfsStack) == 0:
         row, col = findStart(grid, nrow, ncol)
 
     constraint = False
-    # Iterate through the stack and attempt to place down bridges
+    # Iterate through the adjList and attempt to place down bridges
     neighbour = dfsStack.pop()
     buildBridge(grid, object, neighbour)
     if not constraint:
