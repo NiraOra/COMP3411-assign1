@@ -27,9 +27,10 @@ def main():
         print("puzzle is FINISHED we are lit!")
     else: 
         print('We continue')
-        # print("starting neighbours", grid[(i, j)].adjList)
+        print("starting neighbours", grid[(i, j)].printAdjList())
         # print("dfs adjList", dfsStack)
-        # DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
+        hi = DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
+        print(hi)
         # if goalReached(grid, nrow, ncol):
         #     print("puzzle is FINISHED!")
         # else:
@@ -93,7 +94,6 @@ def findStart(grid, nrow, ncol, dfsStack):
     startRow = -1
     startCol = -1
     
-    
     for row in range(nrow):
         for col in range(ncol):
             # print(grid[(row, col)].printLook())
@@ -108,8 +108,8 @@ def findStart(grid, nrow, ncol, dfsStack):
     if startRow != -1 and startCol != -1:
         print("111 ", startRow, startCol)
         dfsStack.append(grid[(startRow, startCol)])
-        for i in range(len(grid[(startRow, startCol)].adjList)):
-            dfsStack.append(grid[(startRow, startCol)].adjList[i])
+        # for i in range(len(grid[(startRow, startCol)].adjList)):
+        #     dfsStack.append(grid[(startRow, startCol)].adjList[i])
         # Mark the starting island as visited
         grid[(startRow, startCol)].visited = True
         return True, startRow, startCol, dfsStack
@@ -125,6 +125,7 @@ def specialIslands(grid, row, col):
     if not isinstance(grid[(row, col)],islN.IslandNode):    
         return
     elif grid[(row, col)].visited:
+        # print(grid[(row, col)])
         return
     
     numNeighbours = len(grid[(row, col)].adjList)
@@ -140,6 +141,7 @@ def specialIslands(grid, row, col):
         or (numNeighbours == 4 and islandCap == 12):
         numBridges = 3
     else: 
+        # if the cases r not there, then returning!
         return
     
     # mark the island as visited
@@ -220,76 +222,39 @@ def updateCapacity(object, endObject, numBridges):
 # DFS backtracking function which iterates through the adjList and 
 # attempts to connect the neighbours under the constraints.
 # If a constraint is violated, it backtracks and retries.
-def DFSbacktracking(currNode, grid, nrow, ncol, dfsStack):
-    # if DFSbacktracking(currNode, grid, nrow, ncol, dfsStack): 
-    #     return 
-    # If the adjList is empty, find the new starting point and update stack
-    # with neighbours of such an array
-    # NOT NEEDED: we are taking care of this initially so. either way it is alright
-    if len(dfsStack) == 0:
-        # currNode.visited = True
-        _, row, col, dfsStack = findStart(grid, nrow, ncol, dfsStack)
-        currNode = grid[(row, col)]
+def DFSbacktracking(currNode: islN.IslandNode, grid, nrow, ncol, visited_temp):
+    # Base case: If the current node has been visited, return that its done ?
+    # if len(visited_temp) == 1 and currNode in visited_temp:
+    #     print("here")
+    #     return True
+    
+    # if cyclical
+    if visited_temp[0].row == currNode.row and visited_temp[0].col == currNode.col:
+        visited_temp = backtrackBuild(grid, visited_temp, 1)
+        return True
+        # DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
 
-    # array to keep track of all the nodes visited
-    # print(row, col)
+    some = currNode.adjList
+    print(some)
+    counter = 0
     
-    visited = [currNode]
-    
-    # wait
-    # print(dfsStack)
-    # dfsStack[0].printAdjList()
-    
-    for i in range(1, len(dfsStack)):
-        # if there is no more, then return that it has been reached
-        # TODO: ASSUMING THAT THERE IS ALWAYS A SOLUTION
-        if len(visited) == 0: return True
+    for i in range(len(some)):
+        # if there is nothing more, backtrack build
+        counter = counter + 1
+        # if the visited array has 1 more left and it is the current node
+        # backtrack build the array and then update the visited array accordingly
+        if len(some) == 1 and currNode in some:
+            visited_temp = backtrackBuild(grid, visited_temp, counter)
+            DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
+        # else if it is cyclical (like 4 -> 4 -> 4 -> 4 (first node))
+        # implement this!!
         
-        # otherwise, append
-        neighbour = dfsStack[i][0]
-        visited.append(neighbour)
-        neighbour.visited = True
-        # if there is only one answer and this works then backtrack and return
-        if len(neighbour.adjList) == 1 and neighbour.adjList[0].eq(currNode):
-            # build towards the very end
-            backtrackBuild(grid, visited, 1)
-            dfsStack.remove(neighbour)
-            dfsStack.remove(currNode)
-            return True
-        else:
-        # if the neighbour passes the backtracking thing. then return true
-            DFSbacktracking(neighbour, grid, nrow, ncol, dfsStack)
-        # print(visited)
-        
-
-    # for i in range(1, len(dfsStack)):
-    #     # get the neighbours of curr node
-    #     print("curr stuff is ", i, "and node is ", dfsStack[i])
-    #     temp = dfsStack[i][0].adjList
-    #     dfsStack[i][0].visited = True
-    #     visited.append(dfsStack[i])
-    #     # if there is no more, then finished!
-    #     if DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack):
-    #         return True
-    #     if len(temp) == 1: # the only neighbour existing in s is the one of the dfsStack
-    #         visited = backtrackBuild(grid, visited, i)
-    #         if len(visited) == 0:
-    #             # remove everything and then return true
-    #             dfsStack.pop()
-    #             return True
-    #         else:
-    #             DFSbacktracking(dfsStack[i], grid, nrow, ncol, dfsStack)
-
-    # return False
+        # if it is satisfied, then done
+        visited_temp.append(some[i])
+        # otherwise, continue on
+        DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
+    
     return False
-
-    # for s in dfsStack:
-    #     neighbourRow, neighbourCol = dfsStack.pop()
-    # print(dfsStack[0].eq(grid[(neighbourRow, neighbourCol)]))
-        # if dfsStack[0].eq(grid[(neighbourRow, neighbourCol)]):
-        #     pass
-        # else: 
-        #     meow = False
 
 def backtrackBuild(grid, visited, endNum):
     for i in range(len(visited), endNum, -1):
@@ -307,8 +272,8 @@ def goalReached(grid, nrow, ncol):
     numIslands = 0
     # End condition: if all the islands have been visited and
     # their capacities are full.
-    for i in range(0, nrow):
-        for j in range(0, ncol):
+    for i in range(nrow):
+        for j in range(ncol):
             if isinstance(grid[(i, j)], islN.IslandNode):
                 numIslands += 1
                 object = grid[(i, j)]

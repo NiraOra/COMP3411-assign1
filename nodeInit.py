@@ -99,7 +99,7 @@ def appendStack(object, neighbours):
     # print(object.getCurrCapacity(), "is the current island as of now")
 
     for i in range(len(neighbours)):
-        print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
+        # print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
         # Only including island neighbours
         object.putStack(neighbours[i])
 
