@@ -19,19 +19,20 @@ def main():
     dfsStack = []
 
     # iterate through the grid and fill in the bridges for the special cases first
-    for i in range(0, nrow):
-        for j in range(0, ncol):
+    for i in range(nrow):
+        for j in range(ncol):
             specialIslands(grid, i , j)
 
-    startingIsland = findStart(grid, nrow, ncol, dfsStack)
-
-    print("starting neighbours", startingIsland.stack)
-    print("dfs stack", dfsStack)
+    found, i, j, dfsStack = findStart(grid, nrow, ncol, dfsStack)
     
-    neighbour = startingIsland.stack[0][0]
-
-    DFSbacktracking(grid, nrow, ncol, dfsStack, startingIsland, neighbour)
-
+    if found == False and goalReached(grid, nrow, ncol):
+         print("puzzle is FINISHED we are lit!")
+    else: 
+        print('We continue')
+    # print("starting neighbours", grid[(i, j)].stack)
+    # print("dfs stack", dfsStack)
+    DFSbacktracking(dfsStack, grid, nrow, ncol)
+    
     if goalReached(grid, nrow, ncol):
         print("puzzle is FINISHED!")
     else:
@@ -96,22 +97,36 @@ def scan_map():
 def findStart(grid, nrow, ncol, dfsStack):
     # Iterate until we find the first island that is unvisited
     startFound = False
-    for row in range(0, nrow):
-        for col in range(0, ncol):
+    startRow = -1
+    startCol = -1
+    
+    for row in range(nrow):
+        for col in range(ncol):
+            # print(grid[(row, col)].printLook())
             if isinstance(grid[(row, col)], islN.IslandNode) and \
-                not grid[(row, col)].visited:
+            not grid[(row, col)].visited:
                 startFound = True
                 break
         if startFound:
-            break 
+            break
 
+    startRow = row
+    startCol = col
+
+    # If there is a valid start point then continue
     # Append the starting island and its neighbours to the DFS Stack
-    pushNeighbours(grid[(row, col)], dfsStack)
-
-    # Mark the starting island as visited
-    grid[(row, col)].visited = True
-
-    return grid[(row, col)]
+    if startRow != -1 and startCol != -1:
+        print("111 ", startRow, startCol)
+        # Append the starting island and its neighbours to the DFS Stack
+        pushNeighbours(grid[(row, col)], dfsStack)
+        # Mark the starting island as visited
+        grid[(startRow, startCol)].visited = True
+        return True, startRow, startCol, dfsStack
+    
+    # SMALL case: if all the special islands are filled and there is no more
+    # to be appended then take care of that -> ie, return that there is no more
+    # islands to be appended
+    return False, startRow, startCol, dfsStack
 
 # Filling in the islands which only have one certain bridge configuration possible
 def specialIslands(grid, row, col):
@@ -238,7 +253,7 @@ def validStep(object):
 
 #**********************************************************************
 
-def DFSbacktracking(grid, nrow, ncol, dfsStack, start, neighbour):
+def DFSbacktracking2(grid, nrow, ncol, dfsStack, start, neighbour):
     visited = []
 
     doDFSbacktracking(grid, nrow, ncol, dfsStack, visited, start, neighbour)
@@ -317,15 +332,32 @@ def goalReached(grid, nrow, ncol):
 
 #**********************************************************************
 
-# restarting and trying to write a new dfs function
-def dummy(grid, row, col, island):
-    
-    '''
-    try to connect the islands with max weight.
-    if it doesn't work, try with 2.
-    '''
+def DFSbacktracking(currNode: islN.IslandNode, grid, nrow, ncol, visited_temp):
+    # Base case: If the current node has been visited, return that its done ?
+    if len(visited_temp) == 1 and currNode in visited_temp:
+        return True
 
-    pass
+    some = currNode.adjList
+    print(some)
+    counter = 0
+    
+    for i in range(len(some)):
+        # if there is nothing more, backtrack build
+        counter = counter + 1
+        # if the visited array has 1 more left and it is the current node
+        # backtrack build the array and then update the visited array accordingly
+        if len(some) == 1 and currNode in some:
+            visited_temp = backtrackBuild(grid, visited_temp, counter)
+            DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
+        # else if it is cyclical (like 4 -> 4 -> 4 -> 4 (first node))
+        # implement this!!!
+        
+        # if it is satisfied, then done
+        visited_temp.append(some[i])
+        # otherwise, continue on
+        DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
+    
+    return False
 
 #**********************************************************************
 
