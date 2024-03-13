@@ -1,4 +1,56 @@
 #!/usr/bin/python3
+# EXPLANATION
+# For solving the hashi puzzle, we decided to incorporate a DFS backtracking method along with a mrv approach
+# and add some constraints to make sure that we were able to find a correct path for the hashi puzzle given.
+#
+# Data Structure: To implement this approach, we decided to convert each value on the map scanned from input
+# to a node, which can be classified as:
+# 1. IslandNode: nodes  representing islands which contain the maximum capacity of the bridges that the island can hold.
+# 2. WaterNode: nodes representing the water "." in which a bridge may or may not be built.
+# 
+# IslandNode consists of:
+# 1. Row value
+# 2. Column value
+# 3. Capacity
+# 4. Neighbours array: holds the neighbours and orientation of connection it makes (horizontal or vertical)
+# 
+# and WaterNode consists of:
+# 1. Row value
+# 2. Column value
+# 3. Capacity
+# 4. bridgeType: if a bridge was built, then we could assign it the value so it is easier to print
+#
+# Algorithm:
+# 1. We first iterate through the map scanned from input and create islandNodes and waterNodes. 
+# 2. We then iterate through the map to add the neighbours for each instance of an island node
+# 3. Then, we consider some constraints (ie, some special cases for the hashi puzzle) and add all the guarenteed bridges
+# An example of such a case would be if there is an island 1 with only 1 other node connected to it, which would fall under this 
+# category and allow us to solve for this case easily
+# 4. We then move on to find out the island that we need to start from after solving for the special cases.
+# 5. After this, we use DFS backtracking to build the bridges recursively. The idea here is to 
+# look at each particular path formed from the parent to the neighbour and keep iterating till either
+# (i) A cyclical path is reached (it reached the parent node)
+# (ii) The last reached node has no other connections
+# After which we decide to backtrack the nodes visited and form bridges between them if possible. 
+# The number of bridges formed is obtained from the minimum of 3 and the max capacities of each of the island nodes. 
+#
+# EXAMPLE (just special cases)
+# Input: 
+# 1 . 1
+# . . .
+# 
+# Here, we see that the island at (0, 0) has only one other connection [1], which
+# makes it easy for us to form a connection without having to backtrack, giving us
+# the following output:
+#
+# Output: 
+# 1 - 1
+# 
+#
+# EXAMPLE (normal)
+# Input: 
+
+
 import numpy as np
 import sys
 import nodeInit
@@ -224,18 +276,19 @@ def updateCapacity(object, endObject, numBridges):
 # If a constraint is violated, it backtracks and retries.
 def DFSbacktracking(currNode: islN.IslandNode, grid, nrow, ncol, visited_temp):
     # Base case: If the current node has been visited, return that its done ?
-    # if len(visited_temp) == 1 and currNode in visited_temp:
-    #     print("here")
-    #     return True
+    if len(visited_temp) == 1 and currNode in visited_temp:
+        print("here")
+        return True
     
     # if cyclical
-    if visited_temp[0].row == currNode.row and visited_temp[0].col == currNode.col:
+    if visited_temp[0].row == currNode.row and visited_temp[0].col == currNode.col \
+        and len(visited_temp) > 1:
         visited_temp = backtrackBuild(grid, visited_temp, 1)
         return True
         # DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
 
     some = currNode.adjList
-    print(some)
+    # print(some)
     counter = 0
     
     for i in range(len(some)):
@@ -257,9 +310,14 @@ def DFSbacktracking(currNode: islN.IslandNode, grid, nrow, ncol, visited_temp):
     return False
 
 def backtrackBuild(grid, visited, endNum):
-    for i in range(len(visited), endNum, -1):
+    if len(visited) == 1:
+        return visited
+    
+    for i in range(len(visited) - 2, endNum, -1):
+        print(visited[i][0].row, visited[i][0].col)
+        check = min(visited[i + 1], visited[i])
         # basically setting the bridge 
-        buildBridge(grid, visited[i], visited[i - 1], min(visited[i], visited[i - 1]))
+        buildBridge(grid, visited[i + 1], visited[i], min(check, 3))
         # remove the node that the bridge was built on
         visited.remove(visited[i])
         
