@@ -17,22 +17,23 @@ def main():
     dfsStack = []
 
     # iterate through the grid and fill in the bridges for the special cases first
-    for i in range(0, nrow):
-        for j in range(0, ncol):
+    for i in range(nrow):
+        for j in range(ncol):
             specialIslands(grid, i , j)
 
-    i, j = findStart(grid, nrow, ncol, dfsStack)
-
-    print("starting neighbours", grid[(i, j)].stack)
-    print("dfs stack", dfsStack)
+    found, i, j, dfsStack = findStart(grid, nrow, ncol, dfsStack)
     
-    
+    if found == False and goalReached(grid, nrow, ncol):
+         print("puzzle is FINISHED we are lit!")
+    else: 
+        print('We continue')
+    # print("starting neighbours", grid[(i, j)].stack)
+    # print("dfs stack", dfsStack)
     # DFSbacktracking(dfsStack, grid, nrow, ncol)
-
-    if goalReached(grid, nrow, ncol):
-        print("puzzle is FINISHED!")
-    else:
-        print("puzzle is NOT finished!")
+        if goalReached(grid, nrow, ncol):
+            print("puzzle is FINISHED!")
+        else:
+            print("puzzle is NOT finished!")
 
     # TO REMOVE: small test LOL
     # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
@@ -88,24 +89,35 @@ def scan_map():
 # Function which finds the starting point for the search
 def findStart(grid, nrow, ncol, dfsStack):
     # Iterate until we find the first island that is unvisited
-    startFound = False
-    for row in range(0, nrow):
-        for col in range(0, ncol):
-            if isinstance(grid[(row, col)], islN.IslandNode) and \
-                not grid[(row, col)].visited:
-                startFound = True
-                break
-        if startFound:
-            break 
-
-    # Append the starting island and its neighbours to the DFS Stack
-    dfsStack.append(grid[(row, col)])
-    for i in range(0, len(grid[(row, col)].stack)):
-        dfsStack.append(grid[(row, col)].stack[i])
-    # Mark the starting island as visited
-    grid[(row, col)].visited = True
+    # startFound = False
+    startRow = -1
+    startCol = -1
     
-    return row, col
+    
+    for row in range(nrow):
+        for col in range(ncol):
+            # print(grid[(row, col)].printLook())
+            if isinstance(grid[(row, col)], islN.IslandNode) and \
+            not grid[(row, col)].visited:
+                startRow = row
+                startCol = col
+                break
+    
+    # If there is a valid start point then continue
+    # Append the starting island and its neighbours to the DFS Stack
+    if startRow != -1 and startCol != -1:
+        print("111 ", startRow, startCol)
+        dfsStack.append(grid[(startRow, startCol)])
+        for i in range(len(grid[(startRow, startCol)].stack)):
+            dfsStack.append(grid[(startRow, startCol)].stack[i])
+        # Mark the starting island as visited
+        grid[(startRow, startCol)].visited = True
+        return True, startRow, startCol, dfsStack
+    
+    # SMALL case: if all the special islands are filled and there is no more
+    # to be appended then take care of that -> ie, return that there is no more
+    # islands to be appended
+    return False, startRow, startCol, dfsStack
 
 # Filling in the islands which only have one certain bridge configuration possible
 def specialIslands(grid, row, col):

@@ -43,6 +43,7 @@ class Node:
         self.row = row
         self.col = col
         self.currCapacity = capacity
+        self.visited = False
         # return self
 
     # iterate through capacity"""
