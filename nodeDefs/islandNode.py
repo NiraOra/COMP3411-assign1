@@ -2,34 +2,20 @@
 # "island NODE"
 from nodeDefs import node
 from nodeDefs import valueDefs as vd
-# # FOR DFS: append the bridges based on the connected components
-# # map maybe not needed but lmk. anyway
-# def bridgeAdj(bridgeNode, map):
-#     # idea: just fill it up with the bridges ig ?
-#     # based on bridges, tweak current capacity accordingly
-#     # 1. check current capacity
-#     currentCapacity = currentCapacity + 1
-#     # 2. assert if current capacity is gonna be greater than max capacity; then no bridge
-#     # else. work
-#     # 3. done. can also change the type of bridge by calling bridgeNode
-#     print("DONE. ", adjList)
-#     pass
 
+# node: islandNode
 class IslandNode(node.Node):
-    currentCapacity = 0
     # max capacity of island
     maxCapacity = 0
     # if visited or not
     visited = False
-    # fill this with neighbouring bridges as time passes
+    # fill this with neighboring bridges as time passes
     adjList = []
 
     def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
         self.adjList = []
         self.maxCapacity = capacity
-        # self.findNeighbours(row, col, map, nrow, ncol)
-        # return self
 
     def putStack(self, item):
         self.adjList.append(item)
@@ -62,26 +48,6 @@ class IslandNode(node.Node):
         # print("Hello it is me {", self.row, ",", self.col, "} with water node ",
         # item.getCurrCapacity())
     
-    # CHECK_NEIGHBOURS
-    # def dfsNeighbour(self, grid, nrow, ncol):
-    #     if self.currCapacity == self.maxCapacity:
-    #         return True
-        
-    #     self.visited = True
-        
-    #     for neighbour in self.adjList:
-    #         if not neighbour.visited:
-    #             if neighbour.maxCapacity - neighbour.currCapacity > 1 and self.currCapacity + 1 <= self.maxCapacity:
-    #                 neighbour.updateCapacity()
-    #                 if neighbour.dfsNeighbour(grid, nrow, ncol):
-    #                     return True
-    #                 # bridge built
-    #                 neighbour.currCapacity = neighbour.currCapacity - 1
-                    
-    #     self.visited = False
-    #     self.currCapacity = 0
-    #     return False
-
     # for printing
     def printLook(self):
         if self.maxCapacity == 10:

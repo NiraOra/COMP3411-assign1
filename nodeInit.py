@@ -88,18 +88,13 @@ def findNeighbours(object, grid, nrow, ncol):
     # sort List over here ? -> based on island Capacity
     neighbourList = sorted(neighbourList, key=lambda x: x.maxCapacity)
 
-    # # print out the neighbour adjacency list
-    # object.printAdjList() 
-
     # append to adjList
     appendStack(object, neighbourList)
 
 # TODO: append to Stack: also from Sophie's code
 def appendStack(object, neighbours):
-    # print(object.getCurrCapacity(), "is the current island as of now")
-
+    # adding to stack
     for i in range(len(neighbours)):
-        # print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
         # Only including island neighbours
         object.putStack(neighbours[i])
 

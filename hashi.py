@@ -249,13 +249,13 @@ def buildBridge(grid, object, endObject, numBridges):
 # Checks if the capacity of the given islands is overfilled
 # Returns true if it is a valid capacity and false if it is overfilled.
 def validCapacity(object, endObject, numBridges):
-    objectNewCap = object.currentCapacity + numBridges
-    endObjectNewCap = endObject.currentCapacity + numBridges
+    objectNewCap = object.currCapacity + numBridges
+    endObjectNewCap = endObject.currCapacity + numBridges
 
     # If the current capacity of the islands is already overflowing
     # then return false 
-    if object.currentCapacity > object.maxCapacity or \
-    endObject.currentCapacity > endObject.maxCapacity:
+    if object.currCapacity > object.maxCapacity or \
+    endObject.currCapacity > endObject.maxCapacity:
         return False
     # Else if the capacity of the islands after adding the bridges
     # will be overflowing then return false
@@ -268,8 +268,8 @@ def validCapacity(object, endObject, numBridges):
 # Updates the capacity of the island and its neighbour. 
 def updateCapacity(object, endObject, numBridges):
     if validCapacity(object, endObject, numBridges):
-        object.currentCapacity += numBridges
-        endObject.currentCapacity += numBridges
+        object.currCapacity += numBridges
+        endObject.currCapacity += numBridges
         return True
     else:
         return False
@@ -307,7 +307,7 @@ def DFSbacktracking(currNode, grid, nrow, ncol):
 
         for neighbor in neighbors:
             if neighbor not in visited:
-                numBridges = min(3, node.maxCapacity - node.currentCapacity, neighbor.maxCapacity - neighbor.currentCapacity)
+                numBridges = min(3, node.maxCapacity - node.currCapacity, neighbor.maxCapacity - neighbor.currCapacity)
                 if numBridges > 0:
                     # Push neighbor to stack with potential bridge info
                     stack.append((neighbor, (node, neighbor, numBridges)))
@@ -317,7 +317,7 @@ def DFSbacktracking(currNode, grid, nrow, ncol):
 def remainingValues(node):
     # Calculate the remaining valid connections for the node
     # TODO: change if necessary
-    return node.maxCapacity - node.currentCapacity
+    return node.maxCapacity - node.currCapacity
 
 def backtrackingBuild(grid, visited):
     if len(visited) == 1:
@@ -333,8 +333,8 @@ def backtrackingBuild(grid, visited):
 
 def undoBridge(grid, startNode, endNode, numBridges):
     # This function undoes a bridge between two nodes, adjusting their capacities back
-    startNode.currentCapacity -= numBridges
-    endNode.currentCapacity -= numBridges
+    startNode.currCapacity -= numBridges
+    endNode.currCapacity -= numBridges
     # Also, clear the bridge on water nodes between these islands
     clearBridge(grid, startNode, endNode)
 
@@ -363,9 +363,9 @@ def goalReached(grid, nrow, ncol):
             if isinstance(grid[(i, j)], islN.IslandNode):
                 numIslands += 1
                 object = grid[(i, j)]
-                if object.visited and object.currentCapacity == object.maxCapacity: 
+                if object.visited and object.currCapacity == object.maxCapacity: 
                     numSolved += 1
-                    print("This is island", object.maxCapacity, "and it has current capacity:", object.currentCapacity)
+                    print("This is island", object.maxCapacity, "and it has current capacity:", object.currCapacity)
     
     print("Number of solved islands is", numSolved, "and Total number of islands is", numIslands)
     # If the number of solved islands is equal to the total number of islands,
