@@ -12,8 +12,7 @@
 # 1. Row value
 # 2. Column value
 # 3. Capacity
-# 4. Neighbours array: holds the neighbours and orientation of connection it makes (horizontal or vertical)
-# and it is ordered based on the capacity
+# 4. Neighbours array: holds the neighbours and it is ordered based on the capacity
 # 
 # and WaterNode consists of:
 # 1. Row value
@@ -35,12 +34,22 @@
 # After which we decide to backtrack the nodes visited and form bridges between them if possible. 
 # The number of bridges formed is obtained from the minimum of 3 and the max capacities of each of the island nodes. 
 #
+# CHANGED:
+# Using a stack to keep track of the current node, a bridge pointer to keep track of the path taken
+# and a set to store the nodes visited, we iterate through the DFS backtracking algorithm. 
+# While we look at the latest node/pointer popped, if the node is revisited and there is a bridge then we undo it because it is
+# not necessary. Otherwise, we add this node to the visited list and continue to built a bridge (if the bridge pointer exists)
+# and also check for the goal being reached (ie, if all the islands have been filled with bridges). Then, using MRV, 
+# we sort the neighbours of the current node based on how many bridges can still be built, and then iterate through this 
+# list and append this to the stack
+#
 # EXAMPLE (just special cases)
 # Input: 
 # 1 . 1
 # . . .
+# . . .
 # 
-# Here, we see that the island at (0, 0) has only one other connection [1], which
+# Here, we see that the island at [0, 0] has only one other connection [1], which
 # makes it easy for us to form a connection without having to backtrack, giving us
 # the following output:
 #
@@ -50,7 +59,23 @@
 #
 # EXAMPLE (normal)
 # Input: 
-
+# 1 . . 1
+# . . . .
+# 2 . . 1
+# . . . .
+# 1 . . .
+#
+# Here, since there is 1 special case (at [4, 0] island 1), the specialIslands function takes
+# care of this and then builds a bridge accordingly. After this, we put it through the DFS function
+# with the start node being at [0, 0], after which we iterate through the DFS function to get the following
+# result.
+#
+# Output:
+# 1     1 
+# |     | 
+# 2     1 
+# |       
+# 1      
 
 import numpy as np
 import sys
@@ -280,7 +305,7 @@ def updateCapacity(object, endObject, numBridges):
 # and check if the bridge can be built, if yes, then build the bridge and call the function
 # recursively
 def DFSbacktracking(currNode, grid, nrow, ncol):
-    stack = [(currNode, None)]  # Stack now holds tuples of (node, bridge_to_parent)
+    stack = [(currNode, None)]  # Stack holds tuples of (node, bridge_to_parent)
     visited = set()
 
     while stack:
