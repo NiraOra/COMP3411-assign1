@@ -51,10 +51,10 @@ class Node:
         self.currCapacity = self.currCapacity + 1
         
     # to check if the objects are equal
-    def __eq__(self, object) -> bool:
-        if not isinstance(object, self):
-            return False
-        return self.row == object.row and self.col == object.col
+    # def __eq__(self, object) -> bool:
+    #     if not isinstance(object, self):
+    #         return False
+    #     return self.row == object.row and self.col == object.col
 
     # for final printing :P
     def printLook(self):

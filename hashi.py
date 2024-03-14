@@ -13,6 +13,7 @@
 # 2. Column value
 # 3. Capacity
 # 4. Neighbours array: holds the neighbours and orientation of connection it makes (horizontal or vertical)
+# and it is ordered based on the capacity
 # 
 # and WaterNode consists of:
 # 1. Row value
@@ -83,10 +84,10 @@ def main():
         # print("dfs adjList", dfsStack)
         hi = DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
         print(hi)
-        # if goalReached(grid, nrow, ncol):
-        #     print("puzzle is FINISHED!")
-        # else:
-        #     print("puzzle is NOT finished!")
+        if goalReached(grid, nrow, ncol):
+            print("puzzle is FINISHED!")
+        else:
+            print("puzzle is NOT finished!")
 
     # TO REMOVE: small test LOL
     # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
@@ -113,7 +114,7 @@ def debug(nrow, ncol, dict):
         for j in range(ncol):
             # here, ideally should be able to call the function in itself in the end
             print("the value at the node {", i, j, "} is ", dict[(i, j)].getCurrCapacity())
-      
+
 # 1st step: to scan the map  
 def scan_map():
     text = []
@@ -181,7 +182,7 @@ def specialIslands(grid, row, col):
         return
     
     numNeighbours = len(grid[(row, col)].adjList)
-    islandCap = grid[(row, col)].maxCapacity
+    islandCap = grid[(row, col)].maxCapacity - grid[(row, col)].currCapacity
     
     # checking if the node has only one neighbour and
     # island has capacity 1,2 or 3
@@ -271,58 +272,56 @@ def updateCapacity(object, endObject, numBridges):
     else:
         return False
 
-# DFS backtracking function which iterates through the adjList and 
-# attempts to connect the neighbours under the constraints.
-# If a constraint is violated, it backtracks and retries.
-def DFSbacktracking(currNode: islN.IslandNode, grid, nrow, ncol, visited_temp):
-    # Base case: If the current node has been visited, return that its done ?
-    if len(visited_temp) == 1 and currNode in visited_temp:
-        print("here")
-        return True
-    
-    # if cyclical
-    if visited_temp[0].row == currNode.row and visited_temp[0].col == currNode.col \
-        and len(visited_temp) > 1:
-        visited_temp = backtrackBuild(grid, visited_temp, 1)
-        return True
-        # DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
 
-    some = currNode.adjList
-    # print(some)
-    counter = 0
+# DFS BACKTRACKING code
+def DFSbacktracking(currNode, grid, nrow, ncol, visited):
+    # Base case: If the goal is reached
+    if len(visited) == 0 and goalReached(grid, nrow, ncol):
+        _, row, col, _ = findStart(grid, nrow, ncol, visited)
+        if row == -1 and col == -1:
+            return True
+        else:
+            DFSbacktracking(grid[(row, col)], grid, nrow, ncol, visited)
+
+    currNode.visited = True
+    # visited.append(currNode)
+
+    for neighbor, typeConnection in currNode.adjList:
+        if not neighbor.visited:
+            visited.append(neighbor)
+            print(visited)
+            # Attempt to build a bridge if it's valid
+            if validCapacity(currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3)) and updateCapacity(currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3)):
+                buildBridge(grid, currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3))
+                if DFSbacktracking(neighbor, grid, nrow, ncol, visited):
+                    return True
+                # Undo the bridge if it leads to a dead end
+                undoBridge(grid, currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3))
     
-    for i in range(len(some)):
-        # if there is nothing more, backtrack build
-        counter = counter + 1
-        # if the visited array has 1 more left and it is the current node
-        # backtrack build the array and then update the visited array accordingly
-        if len(some) == 1 and currNode in some:
-            visited_temp = backtrackBuild(grid, visited_temp, counter)
-            DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
-        # else if it is cyclical (like 4 -> 4 -> 4 -> 4 (first node))
-        # implement this!!
-        
-        # if it is satisfied, then done
-        visited_temp.append(some[i])
-        # otherwise, continue on
-        DFSbacktracking(some[i][0], grid, nrow, ncol, visited_temp)
-    
+    # visited.pop()
+    currNode.visited = False
     return False
 
-def backtrackBuild(grid, visited, endNum):
-    if len(visited) == 1:
-        return visited
-    
-    for i in range(len(visited) - 2, endNum, -1):
-        print(visited[i][0].row, visited[i][0].col)
-        check = min(visited[i + 1], visited[i])
-        # basically setting the bridge 
-        buildBridge(grid, visited[i + 1], visited[i], min(check, 3))
-        # remove the node that the bridge was built on
-        visited.remove(visited[i])
-        
-    return visited
+def undoBridge(grid, startNode, endNode, numBridges):
+    # This function undoes a bridge between two nodes, adjusting their capacities back
+    startNode.currentCapacity -= numBridges
+    endNode.currentCapacity -= numBridges
+    # Also, clear the bridge on water nodes between these islands
+    clearBridge(grid, startNode, endNode)
 
+def clearBridge(grid, startNode, endNode):
+    # Clears the bridge between startNode and endNode
+    row, col = startNode.row, startNode.col
+    endRow, endCol = endNode.row, endNode.col
+
+    if row == endRow:  # Horizontal bridge
+        for i in range(min(col, endCol) + 1, max(col, endCol)):
+            if isinstance(grid[(row, i)], watN.WaterNode):
+                grid[(row, i)].clearBridge()
+    elif col == endCol:  # Vertical bridge
+        for i in range(min(row, endRow) + 1, max(row, endRow)):
+            if isinstance(grid[(i, col)], watN.WaterNode):
+                grid[(i, col)].clearBridge()
 
 # Function which checks if the goal has been reached.
 def goalReached(grid, nrow, ncol):

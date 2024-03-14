@@ -64,17 +64,10 @@ class WaterNode(node.Node):
         self.horizontalCheck = False
         self.verticalCheck = False
 
-    # just to iterate capacity of the bridge   
-    # def iterateCapacity(self):
-    #     self.bridgeCapacity = self.bridgeCapacity - 1
-
-    # getters: 
-    # overriding the main function
-    # def getCapacity(self):
-    #     return super().getCapacity()
-    
-    # def getBridgeType(self): return self.bridgeType
-    
-    # for printing
+    def clearBridge(self): 
+        self.bridgeType = vd.WATER
+        self.horizontalCheck = True
+        self.verticalCheck = True
+        
     def printLook(self):
         return self.bridgeType
