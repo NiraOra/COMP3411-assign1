@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # EXPLANATION
-# For solving the hashi puzzle, we decided to incorporate a DFS backtracking method along with a mrv approach
+# For solving the hashi puzzle, we decided to incorporate a DFS backtracking method along with a MRV approach
 # and add some constraints to make sure that we were able to find a correct path for the hashi puzzle given.
 #
 # Data Structure: To implement this approach, we decided to convert each value on the map scanned from input
@@ -302,7 +302,7 @@ def DFSbacktracking(currNode, grid, nrow, ncol):
         if goalReached(grid, nrow, ncol):
             return True
 
-        # Apply MRV heuristic here
+        # Apply MRV heuristic here (sorting the remaining number of islands. yes)
         neighbors = sorted(node.adjList, key=lambda neighbor: remainingValues(neighbor))
 
         for neighbor in neighbors:
@@ -316,7 +316,7 @@ def DFSbacktracking(currNode, grid, nrow, ncol):
 
 def remainingValues(node):
     # Calculate the remaining valid connections for the node
-    # This is a simplified example; you'll need to adjust it based on your data structure
+    # TODO: change if necessary
     return node.maxCapacity - node.currentCapacity
 
 def backtrackingBuild(grid, visited):
