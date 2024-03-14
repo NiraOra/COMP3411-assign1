@@ -202,7 +202,7 @@ def specialIslands(grid, row, col):
 
     # fill in the bridges between the island and its neighbours 
     for i in range(numNeighbours):
-        buildBridge(grid, grid[(row, col)], grid[(row, col)].adjList[i][0], numBridges)
+        buildBridge(grid, grid[(row, col)], grid[(row, col)].adjList[i], numBridges)
 
 # Function which builds bridges in the water nodes between islands
 def buildBridge(grid, object, endObject, numBridges):
@@ -286,7 +286,7 @@ def DFSbacktracking(currNode, grid, nrow, ncol, visited):
     currNode.visited = True
     # visited.append(currNode)
 
-    for neighbor, typeConnection in currNode.adjList:
+    for neighbor in currNode.adjList:
         if not neighbor.visited:
             visited.append(neighbor)
             print(visited)

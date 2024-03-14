@@ -39,7 +39,7 @@ class IslandNode(node.Node):
         
     def printDebugStack(self):
         for i in range(len(self.adjList)):
-            print ("Here: ", self.adjList[i][0].maxCapacity)
+            print ("Here: ", self.adjList[i].maxCapacity)
 
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
@@ -96,4 +96,4 @@ class IslandNode(node.Node):
     def printAdjList(self):
         print("Adjacency list: ")
         for i in range(len(self.adjList)):
-            print(self.adjList[i][0].row, self.adjList[i][0].col)
+            print(self.adjList[i].row, self.adjList[i].col)

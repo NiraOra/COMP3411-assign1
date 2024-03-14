@@ -57,7 +57,7 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
             # make it a tuple ?
-            neighbourList.append([grid[(row, i)], "horizontal"])
+            neighbourList.append(grid[(row, i)])
             break
     # RIGHT ISLAND
     for i in range(right, ncol):
@@ -65,7 +65,7 @@ def findNeighbours(object, grid, nrow, ncol):
         if i in [col, col + 1]:
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
-            neighbourList.append([grid[(row, i)], "horizontal"])
+            neighbourList.append(grid[(row, i)])
             break
     # UP ISLAND
     for i in range(above, -1, -1):
@@ -74,7 +74,7 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
             # print("the thing up is in: ", above, col)
-            neighbourList.append([grid[(i, col)], "vertical"])
+            neighbourList.append(grid[(i, col)])
             break
     # DOWN ISLAND
     for i in range(below, nrow):
@@ -83,10 +83,10 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
             # print("the thing down is in: ", below, col, "and is: ", grid[(i, col)])
-            neighbourList.append([grid[(i, col)], "vertical"])
+            neighbourList.append(grid[(i, col)])
             break
     # sort List over here ? -> based on island Capacity
-    neighbourList = sorted(neighbourList, key=lambda x: x[0].maxCapacity)
+    neighbourList = sorted(neighbourList, key=lambda x: x.maxCapacity)
 
     # # print out the neighbour adjacency list
     # object.printAdjList() 
