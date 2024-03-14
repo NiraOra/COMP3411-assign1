@@ -82,7 +82,7 @@ def main():
         print('We continue')
         print("starting neighbours", grid[(i, j)].printAdjList())
         # print("dfs adjList", dfsStack)
-        hi = DFSbacktracking(grid[(i, j)], grid, nrow, ncol, dfsStack)
+        hi = DFSbacktracking(grid[(i, j)], grid, nrow, ncol)
         print(hi)
         if goalReached(grid, nrow, ncol):
             print("puzzle is FINISHED!")
@@ -243,6 +243,8 @@ def buildBridge(grid, object, endObject, numBridges):
                 continue
             grid[(i, col)].setBridge(numBridges, "vertical")
             # grid[(i, col)].horizontalCheck = False
+            
+    return True
 
 # Checks if the capacity of the given islands is overfilled
 # Returns true if it is a valid capacity and false if it is overfilled.
@@ -274,33 +276,60 @@ def updateCapacity(object, endObject, numBridges):
 
 
 # DFS BACKTRACKING code
-def DFSbacktracking(currNode, grid, nrow, ncol, visited):
-    # Base case: If the goal is reached
-    if len(visited) == 0 and goalReached(grid, nrow, ncol):
-        _, row, col, _ = findStart(grid, nrow, ncol, visited)
-        if row == -1 and col == -1:
+# basically: check if the goal is reached, if not, then iterate through the neighbours
+# and check if the bridge can be built, if yes, then build the bridge and call the function
+# recursively
+def DFSbacktracking(currNode, grid, nrow, ncol):
+    stack = [(currNode, None)]  # Stack now holds tuples of (node, bridge_to_parent)
+    visited = set()
+
+    while stack:
+        node, bridge_to_parent = stack.pop()
+        if node in visited:
+            # If revisiting a node, undo the last bridge if it exists
+            if bridge_to_parent:
+                undoBridge(grid, *bridge_to_parent)
+            continue
+
+        visited.add(node)
+        node.visited = True
+
+        # Optionally build a bridge to the parent node if specified
+        if bridge_to_parent:
+            buildBridge(grid, *bridge_to_parent)
+
+        # Check if goal is reached
+        if goalReached(grid, nrow, ncol):
             return True
-        else:
-            DFSbacktracking(grid[(row, col)], grid, nrow, ncol, visited)
 
-    currNode.visited = True
-    # visited.append(currNode)
+        # Apply MRV heuristic here
+        neighbors = sorted(node.adjList, key=lambda neighbor: remainingValues(neighbor))
 
-    for neighbor in currNode.adjList:
-        if not neighbor.visited:
-            visited.append(neighbor)
-            print(visited)
-            # Attempt to build a bridge if it's valid
-            if validCapacity(currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3)) and updateCapacity(currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3)):
-                buildBridge(grid, currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3))
-                if DFSbacktracking(neighbor, grid, nrow, ncol, visited):
-                    return True
-                # Undo the bridge if it leads to a dead end
-                undoBridge(grid, currNode, neighbor, min(currNode.maxCapacity, neighbor.maxCapacity, 3))
-    
-    # visited.pop()
-    currNode.visited = False
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                numBridges = min(3, node.maxCapacity - node.currentCapacity, neighbor.maxCapacity - neighbor.currentCapacity)
+                if numBridges > 0:
+                    # Push neighbor to stack with potential bridge info
+                    stack.append((neighbor, (node, neighbor, numBridges)))
+
     return False
+
+def remainingValues(node):
+    # Calculate the remaining valid connections for the node
+    # This is a simplified example; you'll need to adjust it based on your data structure
+    return node.maxCapacity - node.currentCapacity
+
+def backtrackingBuild(grid, visited):
+    if len(visited) == 1:
+        visited.clear()
+        return visited
+    
+    for i in range(len(visited), 1, -1):
+        numBridges = min(visited[i].maxCapacity, visited[i - 1].maxCapacity, 3)
+        buildBridge(grid, visited[i], visited[i - 1], numBridges)
+        visited.remove(visited[i])
+    
+    return visited
 
 def undoBridge(grid, startNode, endNode, numBridges):
     # This function undoes a bridge between two nodes, adjusting their capacities back
