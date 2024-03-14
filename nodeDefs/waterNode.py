@@ -57,6 +57,7 @@ class WaterNode(node.Node):
                 self.bridgeType = vd.TRIPLE_VERTICAL
                 print("3")
             pass
+        self.setChecks()
         
     # just to set that no more bridges can be formed
     def setChecks(self):

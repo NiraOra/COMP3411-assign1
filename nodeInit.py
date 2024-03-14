@@ -46,7 +46,7 @@ def findNeighbours(object, grid, nrow, ncol):
     left = col
     right = col
 
-    # list of neighbours to add to stack
+    # list of neighbours to add to adjList
     neighbourList = []
 
     # append if island exists
@@ -83,23 +83,23 @@ def findNeighbours(object, grid, nrow, ncol):
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
             # print("the thing down is in: ", below, col, "and is: ", grid[(i, col)])
-            neighbourList.append([grid[(i, col)], "vertical"])
+            neighbourList.append(grid[(i, col)])
             break
     # sort List over here ? -> based on island Capacity
-    neighbourList = sorted(neighbourList, key=lambda x: x[0].maxCapacity)
+    # neighbourList = sorted(neighbourList, key=lambda x: x.maxCapacity)
 
     # # print out the neighbour adjacency list
     # object.printAdjList() 
 
-    # append to stack
-    appendStack(object, neighbourList)
+    # append to adjList
+    appendAdjlist(object, neighbourList)
 
-# TODO: append to Stack: also from Sophie's code
-def appendStack(object, neighbours):
+# append the neighbours to the parent island's adjacency list
+def appendAdjlist(object, neighbours):
     # print(object.getCurrCapacity(), "is the current island as of now")
 
     for i in range(len(neighbours)):
-        print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
+        # print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
         # Only including island neighbours
         object.putStack(neighbours[i])
 

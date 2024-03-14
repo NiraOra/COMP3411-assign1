@@ -23,26 +23,23 @@ class IslandNode(node.Node):
     visited = False
     # fill this with neighbouring bridges as time passes
     adjList = []
-    # stack
-    stack = []
 
     def __init__(self, row, col, capacity):
         super().__init__(row, col, 0)
-        self.stack = []
         self.adjList = []
         self.maxCapacity = capacity
         # self.findNeighbours(row, col, map, nrow, ncol)
         # return self
 
     def putStack(self, item):
-        self.stack.append(item)
+        self.adjList.append(item)
 
     def popStack(self, item):
-        self.stack.remove(item)
+        self.adjList.remove(item)
         
     def printDebugStack(self):
-        for i in range(len(self.stack)):
-            print ("Here: ", self.stack[i][0].maxCapacity)
+        for i in range(len(self.adjList)):
+            print ("Here: ", self.adjList[i][0].maxCapacity)
 
     # NOW: 2 choices
     # 1. Adding bridges for now and then iteratively remove OR
@@ -72,7 +69,7 @@ class IslandNode(node.Node):
         
     #     self.visited = True
         
-    #     for neighbour in self.stack:
+    #     for neighbour in self.adjList:
     #         if not neighbour.visited:
     #             if neighbour.maxCapacity - neighbour.currCapacity > 1 and self.currCapacity + 1 <= self.maxCapacity:
     #                 neighbour.updateCapacity()
@@ -84,17 +81,6 @@ class IslandNode(node.Node):
     #     self.visited = False
     #     self.currCapacity = 0
     #     return False
-
-    def removeFromAdjList(self, item):
-        # just remove the item
-        self.adjList.remove(item)
-    # getters: DO NOT NEED
-    # def getStack(self): return self.stack
-    # def getAdjList(self): return self.adjList
-    # def getCapacity(self):
-    #     return self.maxCapacity
-    # def getCurrCapacity(self):
-    #     return super().getCurrCapacity()
 
     # for printing
     def printLook(self):
@@ -110,4 +96,4 @@ class IslandNode(node.Node):
     def printAdjList(self):
         print("Adjacency list: ")
         for i in range(len(self.adjList)):
-            print(self.adjList[i].getPosition())
+            print(self.adjList[i].row, self.adjList[i].col)
