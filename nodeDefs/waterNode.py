@@ -1,80 +1,58 @@
-# WaterNode test now
+# Initialisation file of the Water Node class and helper functions for water cells.
+
 from nodeDefs import valueDefs as vd
 from nodeDefs import node
 
 class WaterNode(node.Node):
-    # 1. bridgeMaxCapacity is 3; can't go beyond that
-    # 2. bridgeType: SINGLE, DOUBLE, TRIPLE or just water
-    # get functions as well I suppose
-
-    # TO_REMOVE: bridge Capacity as it already exists
-    bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY
-    # initial state
-    bridgeType = vd.WATER
-    # Horizontal variable: check to see if horizontal connection is possible
-    horizontalCheck = True
-    # Vertical variable: check to see if  vertical connection is possible
-    verticalCheck = True
+    bridgeMaxCapacity = vd.MAX_BRIDGE_CAPACITY # Bridges can only have a max weight of 3.
+    bridgeType = vd.WATER # All bridges are initally water i.e there are no bridges.
+    bridgeExists = False  # A check to see if a bridge already exists on a given node.
 
     # initialise waterNode
     def __init__(self, row, col):
         super().__init__(row, col, 0)
-        # return self
     
-    # return true if the capacity is less than max capacity; otherwise return false
+    # Function to check the capacity of a bridge.
+    # Return true if the capacity is less than max capacity; else return false
     def bridgeCheck(self):
         return self.currCapacity < self.bridgeMaxCapacity
     
-    # set the bridge type based on bridge made    
+    # Function to set the bridge type based on the given number of bridges.    
     def setBridge(self, numBridges, bridgeOrientation):
-        # setting the bridge and also like. the capacity basically
-        # um. this depends though hmm. maybe set it based on a thing that says its vertical or
-        # horizontal
+        # Check that the bridge is not at max capacity.
         if self.bridgeCheck() == False:
-            print("No more!!!")
-            # don't pass
+            return
             
-        # DONE. maybe
+        # Horizontal bridge types
         if bridgeOrientation == "horizontal":
             if numBridges == 1:
                 self.bridgeType = vd.SINGLE_HORIZONTAL
-                print("1")
             elif numBridges == 2:
                 self.bridgeType =  vd.DOUBLE_HORIZONTAL
-                print("2")
             elif numBridges == 3:
                 self.bridgeType = vd.TRIPLE_HORIZONTAL
-                print("3")
             pass
+        # Vertical bridge types
         else:
             if numBridges == 1:
                 self.bridgeType = vd.SINGLE_VERTICAL
-                print("1")
             elif numBridges == 2:
                 self.bridgeType = vd.DOUBLE_VERTICAL
-                print("2")
             elif numBridges == 3:
                 self.bridgeType = vd.TRIPLE_VERTICAL
-                print("3")
             pass
         self.setChecks()
         
-    # just to set that no more bridges can be formed
+    # Function which sets that no more bridges can be formed on the cell.
     def setChecks(self):
         self.horizontalCheck = False
         self.verticalCheck = False
 
-    # just to iterate capacity of the bridge   
-    # def iterateCapacity(self):
-    #     self.bridgeCapacity = self.bridgeCapacity - 1
-
-    # getters: 
-    # overriding the main function
-    # def getCapacity(self):
-    #     return super().getCapacity()
-    
-    # def getBridgeType(self): return self.bridgeType
-    
-    # for printing
+    # Function which clears the bridges on the cell and resetting it back to water.
+    def clearBridge(self): 
+        self.bridgeType = vd.WATER
+        self.bridgeExists = False
+        
+    # Function to print out the correct character for the cell.
     def printLook(self):
         return self.bridgeType

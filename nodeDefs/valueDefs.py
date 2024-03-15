@@ -1,4 +1,5 @@
-# certain definitions we can use
+# Helper file to print out the correct character for islands and water cells.
+
 """
 This module defines certain value definitions that can be used.
 

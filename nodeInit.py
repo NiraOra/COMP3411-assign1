@@ -1,3 +1,5 @@
+# Helper file which contains functions to help configure the islands' neighbours.
+
 from nodeDefs import node, waterNode as watN, islandNode as islN, valueDefs as vd
 
 grid = {}
@@ -20,25 +22,18 @@ def nodeInit(map, nrow, ncol):
                 tempNode = islN.IslandNode(i, j, map[i][j])
             # assign node to tempNode
             grid[(i, j)] = tempNode
-            # print(grid[(i, j)].getCurrCapacity())
-            # # grid[(i, j)].callCheck()
-        print("\n")
-        # we can print grid here for now
     islNodesNeighbours(grid, nrow, ncol)
-    # return grid of all nodes
     return grid
 
-# just a setter for all island nodes to have neighbours; also put neighbouring water nodes in adj list or smth. or not.
-# or in a queue. whichever works
+# Function which sets all the island's neighbours into the island's adjacency lists.
 def islNodesNeighbours(grid, nrow, ncol):
     for i in range(nrow):
         for j in range(ncol):
             if isinstance(grid[(i, j)], islN.IslandNode):
                 findNeighbours(grid[i, j], grid, nrow, ncol)
 
-# finds the neighbours accordingly
+# Function which searches for the island's neighbours in all four directions. 
 def findNeighbours(object, grid, nrow, ncol):
-    # initializations
     row, col = object.row, object.col
     # checking all 4 sides
     above = row
@@ -49,58 +44,44 @@ def findNeighbours(object, grid, nrow, ncol):
     # list of neighbours to add to adjList
     neighbourList = []
 
-    # append if island exists
-    # LEFT ISLAND
+    # Append if a neighbouring island exists
+    # LEFT NEIGHBOURING ISLAND
     for i in range(left, -1, -1):
-        # same case
         if i in [col, col - 1]:
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
-            # make it a tuple ?
-            neighbourList.append([grid[(row, i)], "horizontal"])
+            neighbourList.append(grid[(row, i)])
             break
-    # RIGHT ISLAND
+    # RIGHT NEIGHBOURING ISLAND
     for i in range(right, ncol):
-        # case same
         if i in [col, col + 1]:
             pass
         elif isinstance(grid[(row, i)], islN.IslandNode):
-            neighbourList.append([grid[(row, i)], "horizontal"])
+            neighbourList.append(grid[(row, i)])
             break
-    # UP ISLAND
+    # UP NEIGHBOURING ISLAND
     for i in range(above, -1, -1):
-        # same case
         if i in [row, row - 1]:
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
-            # print("the thing up is in: ", above, col)
-            neighbourList.append([grid[(i, col)], "vertical"])
+            neighbourList.append(grid[(i, col)])
             break
-    # DOWN ISLAND
+    # DOWN NEIGHBOURING ISLAND
     for i in range(below, nrow):
-        # edge case
         if i in [row, row + 1]:
             pass
         elif isinstance(grid[(i, col)], islN.IslandNode):
-            # print("the thing down is in: ", below, col, "and is: ", grid[(i, col)])
             neighbourList.append(grid[(i, col)])
             break
-    # sort List over here ? -> based on island Capacity
-    # neighbourList = sorted(neighbourList, key=lambda x: x.maxCapacity)
 
-    # # print out the neighbour adjacency list
-    # object.printAdjList() 
+    # Sorting the neighbours depending on the max capacity.
+    neighbourList = sorted(neighbourList, key=lambda x: x.maxCapacity)
 
-    # append to adjList
-    appendAdjlist(object, neighbourList)
+    # Use the list of neighbours to append to the adjacency list of the island.
+    appendAdjList(object, neighbourList)
 
-# append the neighbours to the parent island's adjacency list
-def appendAdjlist(object, neighbours):
-    # print(object.getCurrCapacity(), "is the current island as of now")
-
+# Function which appends the neighbours into the island's adjacency list.
+def appendAdjList(object, neighbours):
     for i in range(len(neighbours)):
-        # print("Islands nearby: ", neighbours[i][0].maxCapacity, "and type of connection: ", neighbours[i][1])
-        # Only including island neighbours
-        object.putStack(neighbours[i])
-
-    print("STACK DONE!")
+        object.addAdjList(neighbours[i])
+    pass
