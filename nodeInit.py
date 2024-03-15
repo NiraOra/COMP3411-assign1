@@ -98,4 +98,3 @@ def appendStack(object, neighbours):
         # Only including island neighbours
         object.putStack(neighbours[i])
 
-    print("STACK DONE!")

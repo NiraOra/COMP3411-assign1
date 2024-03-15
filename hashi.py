@@ -102,17 +102,18 @@ def main():
     found, i, j, dfsStack = findStart(grid, nrow, ncol, dfsStack)
     
     if found == False and goalReached(grid, nrow, ncol):
-        print("puzzle is FINISHED we are lit!")
+        # print("puzzle is FINISHED we are lit!")
+        pass
     else: 
-        print('We continue')
-        print("starting neighbours", grid[(i, j)].printAdjList())
+        # print('We continue')
+        # print("starting neighbours", grid[(i, j)].printAdjList())
         # print("dfs adjList", dfsStack)
         hi = DFSbacktracking(grid[(i, j)], grid, nrow, ncol)
-        print(hi)
-        if goalReached(grid, nrow, ncol):
-            print("puzzle is FINISHED!")
-        else:
-            print("puzzle is NOT finished!")
+        # print(hi)
+        # if goalReached(grid, nrow, ncol):
+            # print("puzzle is FINISHED!")
+        # else:
+        #     print("puzzle is NOT finished!")
 
     # TO REMOVE: small test LOL
     # print("Just test, ", result[result[(0, 0)].getPosition()].getCapacity()) 
@@ -124,7 +125,7 @@ def main():
 # print map: now can print dictionary
 def printMap(nrow, ncol, map):
     # code = ".123456789abc"
-    print("\nMAP:")
+    # print("\nMAP:")
     for r in range(nrow):
         for c in range(ncol):
             # to change: once we add the bridge stuff
@@ -184,10 +185,8 @@ def findStart(grid, nrow, ncol, dfsStack):
     # If there is a valid start point then continue
     # Append the starting island and its neighbours to the DFS Stack
     if startRow != -1 and startCol != -1:
-        print("111 ", startRow, startCol)
+        # apoend to the starting array
         dfsStack.append(grid[(startRow, startCol)])
-        # for i in range(len(grid[(startRow, startCol)].adjList)):
-        #     dfsStack.append(grid[(startRow, startCol)].adjList[i])
         # Mark the starting island as visited
         grid[(startRow, startCol)].visited = True
         return True, startRow, startCol, dfsStack
@@ -390,9 +389,9 @@ def goalReached(grid, nrow, ncol):
                 object = grid[(i, j)]
                 if object.visited and object.currCapacity == object.maxCapacity: 
                     numSolved += 1
-                    print("This is island", object.maxCapacity, "and it has current capacity:", object.currCapacity)
+                    # print("This is island", object.maxCapacity, "and it has current capacity:", object.currCapacity)
     
-    print("Number of solved islands is", numSolved, "and Total number of islands is", numIslands)
+    # print("Number of solved islands is", numSolved, "and Total number of islands is", numIslands)
     # If the number of solved islands is equal to the total number of islands,
     # then the puzzle is solved.
     if (numSolved == numIslands):
